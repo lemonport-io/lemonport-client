@@ -1,0 +1,36 @@
+{
+  "short_name": "Lemonport",
+  "name": "Lemonport",
+  "theme_color": "#FFFFFF",
+  "background_color": "#1A8DF1",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./lemonport-1x.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "./lemonport-2x.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "./lemonport-3x.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "./lemonport-4x.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./lemonport-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/"
+}
