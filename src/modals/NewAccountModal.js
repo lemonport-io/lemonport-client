@@ -6,7 +6,7 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import Title from '../components/Title';
+
 import cross from '../assets/cross.svg';
 import {
   dashboardGenerateAccount,
@@ -85,7 +85,7 @@ class NewAccountModal extends Component {
       case 'GENERATE_WALLET':
         return (
           <StyledForm onSubmit={this.onGenerate}>
-            <Title>Generate new wallet</Title>
+            <h4>Generate new wallet</h4>
             <Input
               placeholder="Wallet Name (Optional)"
               type="text"
@@ -100,7 +100,7 @@ class NewAccountModal extends Component {
       case 'IMPORT_WALLET':
         return (
           <StyledForm onSubmit={this.onImport}>
-            <Title>Import wallet</Title>
+            <h4>Import wallet</h4>
             <Input
               placeholder="Wallet Name (Optional)"
               type="text"
@@ -127,7 +127,7 @@ class NewAccountModal extends Component {
       case 'ADD_ADDRESS':
         return (
           <StyledForm onSubmit={this.onAddAddress}>
-            <Title>Add Address</Title>
+            <h4>Add Address</h4>
             <p>
               This will only store your address, this is called a <strong>Cold</strong> or{' '}
               <strong>Offline</strong> wallet

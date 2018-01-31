@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import Title from '../components/Title';
 import BaseLayout from '../layout/base';
 import {
   authSignUp,
@@ -31,7 +30,7 @@ class SignUp extends Component {
     return (
       <BaseLayout fetching={this.props.fetching}>
         <StyledForm onSubmit={this.onSubmit}>
-          <Title>Create a new account</Title>
+          <h4>Create a new account</h4>
           <Input
             placeholder="Email"
             type="email"

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import Title from '../components/Title';
+
 import QRCodeDisplay from '../components/QRCodeDisplay';
 import Reload from '../components/Reload';
 import BaseLayout from '../layout/base';
@@ -40,7 +40,7 @@ class SetupTwoFactor extends Component {
       <BaseLayout fetching={this.props.fetching}>
         {!!this.props.uri ? (
           <StyledForm onSubmit={this.onSubmit}>
-            <Title>Enable Two Factor authentication</Title>
+            <h4>Enable Two Factor authentication</h4>
             <QRCodeDisplay data={this.props.uri} scale={5} />
             <StyledParagraph>
               Scan the QR code with your Authenticator app and type the code to enable

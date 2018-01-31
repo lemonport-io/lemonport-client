@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Reload from '../components/Reload';
 import BaseLayout from '../layout/base';
-import Title from '../components/Title';
+
 import Link from '../components/Link';
 import { getSession } from '../helpers/utilities';
 import { colors, transitions, fonts } from '../styles';
@@ -79,7 +79,7 @@ class BuyEther extends Component {
       <BaseLayout>
         {!!this.state.address ? (
           <StyledWrapper>
-            <Title>Don't have Ether yet?</Title>
+            <h4>Don't have Ether yet?</h4>
             <a
               className="coinbase-widget"
               id="coinbase_widget"
@@ -99,7 +99,7 @@ class BuyEther extends Component {
           </StyledWrapper>
         ) : (
           <StyledWrapper>
-            <Title>Failed to load</Title>
+            <h4>Failed to load</h4>
             <Reload onClick={() => window.location.reload()} />
           </StyledWrapper>
         )}

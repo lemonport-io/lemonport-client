@@ -6,7 +6,6 @@ import Input from '../components/Input';
 import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import Title from '../components/Title';
 import BaseLayout from '../layout/base';
 import {
   authSignIn,
@@ -38,7 +37,7 @@ class SignIn extends Component {
       <BaseLayout fetching={this.props.fetching}>
         {!this.props.requireTwoFactor ? (
           <StyledForm onSubmit={this.onSubmit}>
-            <Title>Sign In to your account</Title>
+            <h4>Sign In to your account</h4>
             <Input
               placeholder="Email"
               type="email"
@@ -56,7 +55,7 @@ class SignIn extends Component {
           </StyledForm>
         ) : (
           <StyledForm onSubmit={this.onSubmit}>
-            <Title>Two Factor authentication</Title>
+            <h4>Two Factor authentication</h4>
 
             <InputTwoFactor
               placeholder="6 Digit Code"

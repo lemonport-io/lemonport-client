@@ -6,7 +6,7 @@ import Card from '../components/Card';
 import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import Title from '../components/Title';
+
 import QRCodeDisplay from '../components/QRCodeDisplay';
 import cross from '../assets/cross.svg';
 import { userEnableTwoFactor } from '../reducers/_user';
@@ -62,7 +62,7 @@ class SetupTwoFactorModal extends Component {
     <Card fetching={this.props.fetching}>
       {!!this.props.twoFactor ? (
         <StyledContent>
-          <Title>Success! Two Factor authentication is enabled</Title>
+          <h4>Success! Two Factor authentication is enabled</h4>
           <StyledWrapper>
             <Button dark onClick={this.onClose}>
               Close
@@ -73,7 +73,7 @@ class SetupTwoFactorModal extends Component {
         <div>
           <StyledClose onClick={this.onClose} src={cross} />
           <StyledForm onSubmit={this.onSubmit}>
-            <Title>Enable Two Factor authentication</Title>
+            <h4>Enable Two Factor authentication</h4>
             <QRCodeDisplay data={this.props.uri} scale={5} />
             <StyledParagraph>
               Scan the QR code with your Authenticator app and type the code to enable

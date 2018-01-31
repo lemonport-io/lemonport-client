@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Card from '../components/Card';
-import Title from '../components/Title';
+
 import QRCodeDisplay from '../components/QRCodeDisplay';
 import cross from '../assets/cross.svg';
 import { fonts, colors, responsive } from '../styles';
@@ -41,7 +41,7 @@ class ReceiveEtherModal extends Component {
   render = () => (
     <Card>
       <StyledClose onClick={this.onClose} src={cross} />
-      <Title>{`Receive to ${this.props.modalProps.name}`}</Title>
+      <h4>{`Receive to ${this.props.modalProps.name}`}</h4>
       <QRCodeDisplay data={this.props.modalProps.address} />
       <StyledAddress>{this.props.modalProps.address}</StyledAddress>
     </Card>

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import TextButton from '../components/TextButton';
-import Title from '../components/Title';
 import PopUp from '../components/PopUp';
 import dots from '../assets/dots.svg';
 import { responsive, fonts, colors, transitions } from '../styles';
@@ -114,7 +113,7 @@ class Account extends Component {
   getPrice = (amount, symbol) => {
     const priceObject = this.props.prices[symbol];
     const native = this.props.nativeCurrency;
-    const _amount = Number(amount.replace(/[^0-9.]/gi, ''))
+    const _amount = Number(amount.replace(/[^0-9.]/gi, ''));
     const decimals = native === 'ETH' || native === 'BTC' ? 8 : 2;
     if (priceObject) {
       const result = String(_amount * priceObject[native]);
@@ -143,10 +142,10 @@ class Account extends Component {
           </StyledPopUp>
           <StyledFlex>
             <div>
-              <Title>
+              <h4>
                 {this.props.account.name}{' '}
                 <StyledAccountType>{this.props.account.type}</StyledAccountType>
-              </Title>
+              </h4>
               <StyledAddress>{this.props.account.address}</StyledAddress>
             </div>
           </StyledFlex>

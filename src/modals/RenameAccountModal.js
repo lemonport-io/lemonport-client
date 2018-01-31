@@ -6,7 +6,7 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import Title from '../components/Title';
+
 import cross from '../assets/cross.svg';
 import { dashboardRenameAccount } from '../reducers/_dashboard';
 import { responsive } from '../styles';
@@ -47,7 +47,7 @@ class RenameAccountModal extends Component {
     <Card>
       <StyledClose onClick={this.onClose} src={cross} />
       <StyledForm onSubmit={this.onSubmit}>
-        <Title>{`Rename wallet: ${this.props.modalProps.name}`}</Title>
+        <h4>{`Rename wallet: ${this.props.modalProps.name}`}</h4>
         <Input
           placeholder="New Name"
           type="text"

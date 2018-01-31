@@ -9,7 +9,7 @@ import Input from '../components/Input';
 import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import Title from '../components/Title';
+
 import Select from '../components/Select';
 import cross from '../assets/cross.svg';
 import qrIcon from '../assets/qr-code.svg';
@@ -240,7 +240,7 @@ class SendEtherModal extends Component {
           !this.state.confirm ? (
             <StyledForm onSubmit={this.onSubmit}>
               <StyledFlex>
-                <Title>{`Send from ${this.props.modalProps.name}`}</Title>
+                <h4>{`Send from ${this.props.modalProps.name}`}</h4>
                 <StyledAccountType>{this.props.modalProps.type}</StyledAccountType>
               </StyledFlex>
               <StyledFlex>
@@ -330,7 +330,7 @@ class SendEtherModal extends Component {
           ) : (
             <StyledForm onSubmit={this.onSubmit}>
               <StyledFlex>
-                <Title>{`Confirm transaction from ${this.props.modalProps.name}`}</Title>
+                <h4>{`Confirm transaction from ${this.props.modalProps.name}`}</h4>
                 <StyledAccountType>{this.props.modalProps.type}</StyledAccountType>
               </StyledFlex>
               {this.props.modalProps.type === 'COLD' && (
@@ -392,7 +392,7 @@ class SendEtherModal extends Component {
           )
         ) : (
           <StyledMessage>
-            <Title>Sent</Title>
+            <h4>Sent</h4>
             <StyledParagraph>Your transaction is currently pending</StyledParagraph>
             <StyledParagraph>
               <strong>Transaction Hash:</strong>

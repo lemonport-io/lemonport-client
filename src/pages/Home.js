@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Link from '../components/Link';
-import Title from '../components/Title';
+
 import Column from '../components/Column';
 import BaseLayout from '../layout/base';
 
@@ -23,7 +23,7 @@ const StyledFlex = styled.div`
 const Home = () => (
   <BaseLayout>
     <StyledColumn>
-      <Title>social cryptocurrency online payments platform</Title>
+      <h4>social cryptocurrency online payments platform</h4>
       <StyledFlex>
         <Link to="/signin">
           <Button>Sign In</Button>

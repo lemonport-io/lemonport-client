@@ -17,7 +17,6 @@ const StyledFlex = styled.div`
 `;
 
 const StyledTitle = styled.h4`
-  font-family: monospace;
   margin-top: 40px;
 `;
 

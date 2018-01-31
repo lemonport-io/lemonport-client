@@ -36,7 +36,6 @@ const StyledRelative = styled.div`
 
 const StyledParagraph = styled.p`
   font-size: ${fonts.size.small};
-  font-family: monospace;
   margin: 3px 8px;
   position: absolute;
 `;
@@ -68,7 +67,8 @@ const StyledIndicator = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background-color: ${({ error }) => (error ? `rgba(${colors.red}, 0.5)` : `rgba(${colors.white}, 0.2)`)};
+  background-color: ${({ error }) =>
+    error ? `rgba(${colors.red}, 0.5)` : `rgba(${colors.white}, 0.2)`};
   animation: ${({ fetching }) => (fetching ? `${blink} 1s infinite ease-in-out` : 'none')};
 `;
 

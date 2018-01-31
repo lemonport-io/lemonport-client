@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import Button from '../components/Button';
-import Title from '../components/Title';
+
 import InputTwoFactor from '../components/InputTwoFactor';
 import cross from '../assets/cross.svg';
 import { userCheckTwoFactor } from '../reducers/_user';
@@ -59,7 +59,7 @@ class DeleteAccountModal extends Component {
     <Card>
       <StyledClose onClick={this.onClose} src={cross} />
       <StyledContent>
-        <Title>{`Delete wallet: ${this.props.modalProps.name}`}</Title>
+        <h4>{`Delete wallet: ${this.props.modalProps.name}`}</h4>
         <StyledParagraph>Are you sure you want to delete this wallet?</StyledParagraph>
         {!!this.props.twoFactor && (
           <div>
