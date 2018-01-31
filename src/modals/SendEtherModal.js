@@ -9,7 +9,6 @@ import Input from '../components/Input';
 import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
-
 import Select from '../components/Select';
 import cross from '../assets/cross.svg';
 import qrIcon from '../assets/qr-code.svg';

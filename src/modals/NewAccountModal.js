@@ -6,7 +6,6 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Form from '../components/Form';
-
 import cross from '../assets/cross.svg';
 import {
   dashboardGenerateAccount,

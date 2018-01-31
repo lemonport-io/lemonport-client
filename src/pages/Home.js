@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Link from '../components/Link';
-
 import Column from '../components/Column';
 import BaseLayout from '../layout/base';
 

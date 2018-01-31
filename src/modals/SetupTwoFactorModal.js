@@ -6,7 +6,6 @@ import Card from '../components/Card';
 import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
-
 import QRCodeDisplay from '../components/QRCodeDisplay';
 import cross from '../assets/cross.svg';
 import { userEnableTwoFactor } from '../reducers/_user';

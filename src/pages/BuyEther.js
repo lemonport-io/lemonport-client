@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Reload from '../components/Reload';
 import BaseLayout from '../layout/base';
-
 import Link from '../components/Link';
 import { getSession } from '../helpers/utilities';
 import { colors, transitions, fonts } from '../styles';

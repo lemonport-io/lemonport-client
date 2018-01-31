@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
-
 import QRCodeDisplay from '../components/QRCodeDisplay';
 import Reload from '../components/Reload';
 import BaseLayout from '../layout/base';

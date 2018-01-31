@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import Button from '../components/Button';
-
 import InputTwoFactor from '../components/InputTwoFactor';
 import cross from '../assets/cross.svg';
 import { userCheckTwoFactor } from '../reducers/_user';
