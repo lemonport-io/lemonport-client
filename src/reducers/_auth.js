@@ -121,7 +121,6 @@ export const authSignUp = ({
   confirmPassword,
   facebookID
 }) => dispatch => {
-  console.log(email);
   if (!isValidEmail(email)) {
     dispatch(notificationShow(`Email is invalid`, true));
     dispatch({ type: AUTH_INVALID_EMAIL });

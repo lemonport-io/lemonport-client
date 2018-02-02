@@ -60,111 +60,12 @@ export const apiSignUp = ({
 }) => api.post('/users/signup', { firstName, lastName, email, password, facebookID });
 
 /**
- * @desc get addresses
- * @param  {String} [token='']
- * @return {Promise}
- */
-export const apiGetAddresses = () => {
-  const sessionToken = getSession().token;
-  return api.get('/accounts/addresses', { headers: { Authorization: sessionToken } });
-};
-
-/**
  * @desc get all accounts
  * @return {Promise}
  */
 export const apiGetAllAccounts = () => {
   const sessionToken = getSession().token;
   return api.get('/accounts/all', { headers: { Authorization: sessionToken } });
-};
-
-/**
- * @desc get all accounts tokens
- * @return {Promise}
- */
-export const apiGetAllAccountsTokens = () => {
-  const sessionToken = getSession().token;
-  return api.get('/accounts/tokens', { headers: { Authorization: sessionToken } });
-};
-
-/**
- * @desc get all accounts balances
- * @return {Promise}
- */
-export const apiGetAllAccountsBalances = () => {
-  const sessionToken = getSession().token;
-  return api.get('/accounts/balances', { headers: { Authorization: sessionToken } });
-};
-
-/**
- * @desc generate new account
- * @param  {String}   [name='']
- * @return {Promise}
- */
-export const apiGenerateAccount = (name = '') => {
-  const sessionToken = getSession().token;
-  return api.post('/accounts/generate', { name }, { headers: { Authorization: sessionToken } });
-};
-
-/**
- * @desc import new account
- * @param  {String}   [name='']
- * @param  {String}   [address='']
- * @param  {String}   [privateKey='']
- * @return {Promise}
- */
-export const apiImportAccount = (name = '', address = '', privateKey = '') => {
-  const sessionToken = getSession().token;
-  return api.post(
-    '/accounts/import',
-    { name, address, privateKey },
-    { headers: { Authorization: sessionToken } }
-  );
-};
-
-/**
- * @desc add address (cold wallet)
- * @param  {String}   [name='']
- * @param  {String}   [address='']
- * @return {Promise}
- */
-export const apiAddAddress = (name = '', address = '') => {
-  const sessionToken = getSession().token;
-  return api.post(
-    '/accounts/add-address',
-    { name, address },
-    { headers: { Authorization: sessionToken } }
-  );
-};
-
-/**
- * @desc rename account name
- * @param  {String}   [address='']
- * @param  {String}   [name='']
- * @return {Promise}
- */
-export const apiAccountRename = (address = '', name = '') => {
-  const sessionToken = getSession().token;
-  return api.post(
-    '/accounts/rename',
-    { address, name },
-    { headers: { Authorization: sessionToken } }
-  );
-};
-
-/**
- * @desc delete account
- * @param  {String}   [address='']
- * @param  {String}   [code='']
- * @return {Promise}
- */
-export const apiAccountDelete = (address = '', code = '') => {
-  const sessionToken = getSession().token;
-  return api.post(
-    '/accounts/delete',
-    { address, code },
-    { headers: { Authorization: sessionToken } }
-  );
 };
 
 /**

@@ -73,6 +73,9 @@ class BuyEther extends Component {
 
     document.body.appendChild(script);
   }
+  componentWillUnmount() {
+    window.removeEventListener('message', this.onReceiveMessage, false);
+  }
   render() {
     return (
       <BaseLayout>

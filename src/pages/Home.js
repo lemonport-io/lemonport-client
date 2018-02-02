@@ -50,9 +50,7 @@ class Home extends Component {
         checkStatusFB().then(() =>
           loginFB().then(response => {
             if (response.status === 'connected') {
-              console.log(response);
               fetchFB('/me?fields=email').then(data => {
-                console.log(data);
                 apiCheckUser(data.email).then(({ data }) => {
                   if (data.message === 'USER_FOUND') {
                     window.browserHistory.push('/signin');

@@ -5,21 +5,9 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import Button from '../components/Button';
-import ButtonText from '../components/ButtonText';
-import PopUp from '../components/PopUp';
-import dots from '../assets/dots.svg';
-import { responsive, fonts, colors, transitions } from '../styles';
+import { responsive, fonts, colors } from '../styles';
 import { modalOpen } from '../reducers/_modal';
 import { notificationShow } from '../reducers/_notification';
-
-const StyledAddress = styled.div`
-  font-size: ${fonts.size.small};
-  opacity: 0.7;
-  margin-top: 0;
-  @media screen and (${responsive.sm.max}) {
-    font-size: ${fonts.size.tiny};
-  }
-`;
 
 const StyledFlex = styled.div`
   width: 100%;
@@ -41,12 +29,6 @@ const StyledActions = styled.div`
   }
 `;
 
-const StyledAccountType = styled.span`
-  font-size: ${fonts.size.small};
-  font-family: Roboto, sans-serif;
-  opacity: 0.7;
-`;
-
 const StyledBalance = styled.div`
   display: flex;
   justify-content: space-between;
@@ -58,44 +40,12 @@ const StyledAccount = styled.div`
   margin: 10px auto;
 `;
 
-const StyledSettings = styled.img`
-  transition: ${transitions.base};
-  width: 24px;
-  height: 12px;
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  mask: url(${dots}) center no-repeat;
-  mask-size: 90%;
-  background-color: rgb(${colors.white});
-  @media (hover: hover) {
-    &:hover {
-      opacity: 0.7;
-    }
-  }
-`;
-
-const StyledPopUp = styled(PopUp)`
-  top: 20px;
-  right: 10px;
-  padding: 5px 10px;
-`;
-
 const StyledLine = styled.div`
   width: 100%;
   border-top: 1px solid rgb(${colors.lightGrey});
 `;
 
 class Account extends Component {
-  state = {
-    openSettings: false
-  };
-  toggleSettings = () => {
-    this.setState({ openSettings: !this.state.openSettings });
-  };
-  toggleSettings = () => {
-    this.setState({ openSettings: !this.state.openSettings });
-  };
   onBuyEther = () => window.browserHistory.push(`/buy-ether?address=${this.props.account.address}`);
   openSendModal = () =>
     this.props.modalOpen('SEND_ETHER', {
@@ -106,16 +56,6 @@ class Account extends Component {
     });
   openReceiveModal = () =>
     this.props.modalOpen('RECEIVE_ETHER', {
-      name: this.props.account.name,
-      address: this.props.account.address
-    });
-  openRenameAccountModal = () =>
-    this.props.modalOpen('RENAME_ACCOUNT', {
-      name: this.props.account.name,
-      address: this.props.account.address
-    });
-  openDeleteAccountModal = () =>
-    this.props.modalOpen('DELETE_ACCOUNT', {
       name: this.props.account.name,
       address: this.props.account.address
     });
@@ -142,20 +82,9 @@ class Account extends Component {
     <StyledAccount>
       <Card outline>
         <StyledFlex>
-          <StyledSettings onClick={this.toggleSettings} />
-          <StyledPopUp show={this.state.openSettings}>
-            <ButtonText onClick={this.openRenameAccountModal}>Rename</ButtonText>
-            <ButtonText color="red" onClick={this.openDeleteAccountModal}>
-              Delete
-            </ButtonText>
-          </StyledPopUp>
           <StyledFlex>
             <div>
-              <h4>
-                {this.props.account.name}{' '}
-                <StyledAccountType>{this.props.account.type}</StyledAccountType>
-              </h4>
-              <StyledAddress>{this.props.account.address}</StyledAddress>
+              <h4>{this.props.account.currency}</h4>
             </div>
           </StyledFlex>
           <StyledBalance>

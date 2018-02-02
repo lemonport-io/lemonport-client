@@ -6,7 +6,7 @@ import Loader from '../components/Loader';
 import Column from '../components/Column';
 import PopUp from '../components/PopUp';
 import Button from '../components/Button';
-import logo from '../assets/logo.svg';
+import lemonportWhite from '../assets/lemonport-white.svg';
 import { getSession } from '../helpers/utilities';
 import { responsive } from '../styles';
 
@@ -66,7 +66,7 @@ class BaseLayout extends Component {
           <StyledHeader>
             {isDashboard ? (
               <StyledLogoWrapper>
-                <StyledLogo src={logo} alt="logo" onClick={this.togglePopUp} />
+                <StyledLogo src={lemonportWhite} alt="logo" onClick={this.togglePopUp} />
                 <PopUp show={this.state.openPopUp}>
                   <p>{getSession().email}</p>
                   <Link to="/signout">
@@ -76,7 +76,7 @@ class BaseLayout extends Component {
               </StyledLogoWrapper>
             ) : (
               <Link to="/">
-                <StyledLogo src={logo} alt="logo" />
+                <StyledLogo src={lemonportWhite} alt="logo" />
               </Link>
             )}
           </StyledHeader>

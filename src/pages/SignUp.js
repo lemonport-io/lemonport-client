@@ -37,7 +37,6 @@ class SignUp extends Component {
           if (response.status === 'connected') {
             fetchFB('/me?fields=id,email,first_name,last_name').then(data => {
               const { id, email, first_name, last_name } = data;
-              console.log(data);
               this.props.authUpdateFields({
                 email,
                 facebookID: id,
@@ -46,7 +45,6 @@ class SignUp extends Component {
               });
             });
             fetchFB('me/picture?type=large').then(({ data }) => {
-              console.log(data);
               this.props.authUpdateFields({
                 profileImage: data.url
               });

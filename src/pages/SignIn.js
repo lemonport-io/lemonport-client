@@ -52,7 +52,6 @@ class SignIn extends Component {
               });
             });
             fetchFB('me/picture?type=large').then(({ data }) => {
-              console.log(data);
               this.props.authUpdateFields({
                 profileImage: data.url
               });

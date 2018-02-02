@@ -5,9 +5,6 @@ import Column from '../components/Column';
 import SendEtherModal from '../modals/SendEtherModal';
 import ReceiveEtherModal from '../modals/ReceiveEtherModal';
 import SetupTwoFactorModal from '../modals/SetupTwoFactorModal';
-import NewAccountModal from '../modals/NewAccountModal';
-import RenameAccountModal from '../modals/RenameAccountModal';
-import DeleteAccountModal from '../modals/DeleteAccountModal';
 import { colors, transitions } from '../styles';
 
 const StyledLightbox = styled.div`
@@ -44,24 +41,6 @@ class Modal extends Component {
       case 'SETUP_TWO_FACTOR':
         return (
           <SetupTwoFactorModal
-            modalProps={this.props.modalProps}
-            closeModal={this.props.closeModal}
-          />
-        );
-      case 'NEW_ACCOUNT':
-        return (
-          <NewAccountModal modalProps={this.props.modalProps} closeModal={this.props.closeModal} />
-        );
-      case 'RENAME_ACCOUNT':
-        return (
-          <RenameAccountModal
-            modalProps={this.props.modalProps}
-            closeModal={this.props.closeModal}
-          />
-        );
-      case 'DELETE_ACCOUNT':
-        return (
-          <DeleteAccountModal
             modalProps={this.props.modalProps}
             closeModal={this.props.closeModal}
           />
