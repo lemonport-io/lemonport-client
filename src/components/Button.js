@@ -9,11 +9,11 @@ const StyledButton = styled.button`
   border: none;
   border-style: none;
   box-sizing: border-box;
-  border: ${({ outline }) => (outline ? `1px solid rgb(${colors.dark})` : 'none')};
+  border: ${({ outline }) => (outline ? `1px solid rgb(${colors.white})` : 'none')};
   background-color: ${({ outline, dark }) =>
     outline ? 'transparent' : dark ? `rgb(${colors.dark})` : `rgb(${colors.white})`};
   color: ${({ outline, dark }) =>
-    outline || !dark ? `rgb(${colors.dark})` : `rgb(${colors.white})`};
+    outline || dark ? `rgb(${colors.white})` : `rgb(${colors.dark})`};
   box-shadow: ${({ outline }) => (outline ? 'none' : `${shadows.soft} rgba(${colors.dark}, 0.1)`)};
   border-radius: 7px;
   font-size: ${fonts.size.medium};
@@ -26,7 +26,7 @@ const StyledButton = styled.button`
   will-change: transform;
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   &:active {
@@ -35,7 +35,7 @@ const StyledButton = styled.button`
 
   @media (hover: hover) {
     &:hover {
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 `;

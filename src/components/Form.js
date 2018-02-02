@@ -6,9 +6,6 @@ const StyledForm = styled.form`
   width: 100%;
   padding: 10px;
   display: block;
-  & > * {
-    margin: 10px auto;
-  }
   & button {
     float: right;
   }

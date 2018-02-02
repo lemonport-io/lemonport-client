@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Reload from '../components/Reload';
 import BaseLayout from '../layout/base';
 import Link from '../components/Link';
-import { getSession } from '../helpers/utilities';
+import { getSession, getUrlParameter } from '../helpers/utilities';
 import { colors, transitions, fonts } from '../styles';
 
 const StyledWrapper = styled.div`
@@ -20,7 +20,7 @@ const StyledLink = styled(Link)`
   border-style: none;
   box-sizing: border-box;
   background: transparent;
-  color: rgb(${colors.dark});
+  color: rgb(${colors.white});
   font-size: ${fonts.size.medium};
   font-weight: ${fonts.weight.normal};
   margin: 5px;
@@ -29,7 +29,7 @@ const StyledLink = styled(Link)`
 
   @media (hover: hover) {
     &:hover {
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 `;
@@ -45,7 +45,7 @@ const StyledActions = styled.div`
 class BuyEther extends Component {
   state = {
     email: getSession() ? getSession().email : '',
-    address: getSession() ? getSession().accounts[0].address : {}
+    address: getUrlParameter('address') || getSession() ? getSession().accounts[0].address : {}
   };
   onReceiveMessage = e => {
     if (e.origin === 'https://buy.coinbase.com') {
@@ -79,13 +79,14 @@ class BuyEther extends Component {
         {!!this.state.address ? (
           <StyledWrapper>
             <h4>Don't have Ether yet?</h4>
+            <p>{`Address: ${this.state.address}`}</p>
             <a
               className="coinbase-widget"
               id="coinbase_widget"
               data-prefill_email={this.state.email}
               data-address={this.state.address}
               data-amount="50"
-              data-code="f186b745-bf67-52e8-a9f1-cdaf829991a5"
+              data-code="a35eb8aa-eba8-5dbd-aa2b-c6656ac6c07a"
               data-currency="USD"
               data-crypto_currency="ETH"
               href=""

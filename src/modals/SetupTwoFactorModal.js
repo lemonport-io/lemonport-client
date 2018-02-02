@@ -7,23 +7,9 @@ import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
 import QRCodeDisplay from '../components/QRCodeDisplay';
-import cross from '../assets/cross.svg';
+import ButtonClose from '../components/ButtonClose';
 import { userEnableTwoFactor } from '../reducers/_user';
 import { responsive } from '../styles';
-
-const StyledClose = styled.img`
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 18px;
-  height: 18px;
-
-  @media (hover: hover) {
-    &:hover {
-      opacity: 0.6;
-    }
-  }
-`;
 
 const StyledContent = styled.div`
   @media screen and (${responsive.sm.min}) {
@@ -70,7 +56,7 @@ class SetupTwoFactorModal extends Component {
         </StyledContent>
       ) : (
         <div>
-          <StyledClose onClick={this.onClose} src={cross} />
+          <ButtonClose onClick={this.onClose} />
           <StyledForm onSubmit={this.onSubmit}>
             <h4>Enable Two Factor authentication</h4>
             <QRCodeDisplay data={this.props.uri} scale={5} />

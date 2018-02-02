@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Loader from './Loader';
 import { colors, fonts, transitions } from '../styles';
 
-const StyledTextButton = styled.button`
+const StyledButtonText = styled.button`
   transition: ${transitions.base};
   display: block;
   border: none;
@@ -20,24 +20,24 @@ const StyledTextButton = styled.button`
 
   @media (hover: hover) {
     &:hover {
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 `;
 
-const TextButton = ({ children, fetching, ...props }) => (
-  <StyledTextButton {...props}>{fetching ? <Loader size={40} /> : children}</StyledTextButton>
+const ButtonText = ({ children, fetching, ...props }) => (
+  <StyledButtonText {...props}>{fetching ? <Loader size={40} /> : children}</StyledButtonText>
 );
 
-TextButton.propTypes = {
+ButtonText.propTypes = {
   children: PropTypes.node.isRequired,
   fetching: PropTypes.bool,
   color: PropTypes.string
 };
 
-TextButton.defaultProps = {
+ButtonText.defaultProps = {
   fetching: false,
   color: 'dark'
 };
 
-export default TextButton;
+export default ButtonText;

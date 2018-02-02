@@ -10,7 +10,7 @@ import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
 import Select from '../components/Select';
-import cross from '../assets/cross.svg';
+import ButtonClose from '../components/ButtonClose';
 import qrIcon from '../assets/qr-code.svg';
 import {
   sendGetGasPrices,
@@ -31,20 +31,6 @@ import { convertToNative } from '../helpers/utilities';
 import { userCheckTwoFactor } from '../reducers/_user';
 import { notificationShow } from '../reducers/_notification';
 import { fonts, colors, responsive } from '../styles';
-
-const StyledClose = styled.img`
-  position: absolute;
-  top: 5px;
-  right: 15px;
-  width: 18px;
-  height: 18px;
-
-  @media (hover: hover) {
-    &:hover {
-      opacity: 0.6;
-    }
-  }
-`;
 
 const StyledMessage = styled.div`
   @media screen and (${responsive.sm.min}) {
@@ -85,7 +71,7 @@ const StyledHash = styled.p`
 const StyledAccountType = styled.span`
   font-size: ${fonts.size.small};
   font-family: Roboto, sans-serif;
-  opacity: 0.6;
+  opacity: 0.7;
   line-height: 2.4;
   padding-left: 12px;
   font-weight: ${fonts.weight.semibold};
@@ -94,7 +80,7 @@ const StyledAccountType = styled.span`
 const StyledSelect = styled(Select)`
   position: absolute;
   right: 0;
-  top: 0;
+  top: 10px;
   @media screen and (${responsive.sm.max}) {
     margin: 3px;
   }
@@ -108,7 +94,7 @@ const StyledWrapper = styled.div`
 const StyledQRIcon = styled.img`
   position: absolute;
   right: 0;
-  top: 0;
+  top: 10px;
   width: 22px;
   height: 22px;
   margin: 8px;
@@ -120,7 +106,7 @@ const StyledQRIcon = styled.img`
   }
   @media (hover: hover) {
     &:hover {
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 `;
@@ -234,7 +220,7 @@ class SendEtherModal extends Component {
     selectOptions.unshift('ETH');
     return (
       <Card>
-        <StyledClose onClick={this.onClose} src={cross} />
+        <ButtonClose onClick={this.onClose} />
         {!this.props.transaction ? (
           !this.state.confirm ? (
             <StyledForm onSubmit={this.onSubmit}>
@@ -259,6 +245,7 @@ class SendEtherModal extends Component {
                   onChange={({ target }) => this.props.sendUpdateAmount(target.value)}
                 />
                 <StyledSelect
+                  dark
                   selected={this.props.selected}
                   options={selectOptions}
                   onChange={({ target }) => this.props.sendUpdateSelected(target.value)}
@@ -286,18 +273,9 @@ class SendEtherModal extends Component {
                 <StyledButton
                   dark
                   disabled={this.props.recipient.length !== 42}
-                  onClick={() => this.props.sendUpdateGasPrice(this.props.gasPrices.safeLow)}
-                >
-                  <p>Slow</p>
-                  <p>{`${this.props.gasPrices.safeLow || 0} Gwei ≈ ${this.props.gasPrices
-                    .safeLowWait || 0} mins`}</p>
-                </StyledButton>
-                <StyledButton
-                  dark
-                  disabled={this.props.recipient.length !== 42}
                   onClick={() => this.props.sendUpdateGasPrice(this.props.gasPrices.average)}
                 >
-                  <p>Average</p>
+                  <p>Slow</p>
                   <p>{`${this.props.gasPrices.average || 0} Gwei ≈ ${this.props.gasPrices.avgWait ||
                     0} mins`}</p>
                 </StyledButton>

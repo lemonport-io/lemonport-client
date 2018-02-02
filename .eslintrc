@@ -7,5 +7,6 @@
   "globals": {
     "document": true,
     "window": true,
+    "FB": true
   }
 }

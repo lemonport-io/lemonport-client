@@ -15,6 +15,7 @@ const SignIn = Loadable({
   loader: () => import('./pages/SignIn'),
   loading: () => null
 });
+
 const SignUp = Loadable({
   loader: () => import('./pages/SignUp'),
   loading: () => null

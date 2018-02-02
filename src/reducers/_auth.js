@@ -47,11 +47,9 @@ const AUTH_REQUIRE_TWO_FACTOR = 'auth/AUTH_REQUIRE_TWO_FACTOR';
 
 const AUTH_UPDATE_CODE = 'auth/AUTH_UPDATE_CODE';
 
-const AUTH_CLEAR_FIELDS = 'auht/AUTH_CLEAR_FIELDS';
+const AUTH_UPDATE_FIELDS = 'auth/AUTH_UPDATE_FIELDS';
 
-const AUTH_UPDATE_EMAIL = 'auth/AUTH_UPDATE_EMAIL';
-const AUTH_UPDATE_PASSWORD = 'auth/AUTH_UPDATE_PASSWORD';
-const AUTH_UPDATE_CONFIRM_PASSWORD = 'auth/AUTH_UPDATE_CONFIRM_PASSWORD';
+const AUTH_CLEAR_FIELDS = 'auth/AUTH_CLEAR_FIELDS';
 
 const AUTH_PASSWORDS_DONT_MATCH = 'auth/AUTH_PASSWORDS_DONT_MATCH';
 const AUTH_INVALID_EMAIL = 'auth/AUTH_INVALID_EMAIL';
@@ -115,7 +113,15 @@ export const authSignInTwoFactor = (email, password, code) => (dispatch, getStat
     });
 };
 
-export const authSignUp = (email, password, confirmPassword) => dispatch => {
+export const authSignUp = ({
+  firstName,
+  lastName,
+  email,
+  password,
+  confirmPassword,
+  facebookID
+}) => dispatch => {
+  console.log(email);
   if (!isValidEmail(email)) {
     dispatch(notificationShow(`Email is invalid`, true));
     dispatch({ type: AUTH_INVALID_EMAIL });
@@ -127,7 +133,7 @@ export const authSignUp = (email, password, confirmPassword) => dispatch => {
     return;
   }
   dispatch({ type: AUTH_SIGNUP_REQUEST });
-  apiSignUp(email, password)
+  apiSignUp({ firstName, lastName, email, password, facebookID })
     .then(({ data }) => {
       const { token, email, expires, verified, accounts } = data;
       setSession({ token, email, expires, verified, accounts });
@@ -190,24 +196,14 @@ export const authSignOut = () => dispatch => {
   window.browserHistory.push('/');
 };
 
-export const authUpdateEmail = email => ({
-  type: AUTH_UPDATE_EMAIL,
-  payload: email
-});
-
-export const authUpdatePassword = password => ({
-  type: AUTH_UPDATE_PASSWORD,
-  payload: password
-});
-
 export const authUpdateCode = code => ({
   type: AUTH_UPDATE_CODE,
   payload: code
 });
 
-export const authUpdateConfirmPassword = confirmPassword => ({
-  type: AUTH_UPDATE_CONFIRM_PASSWORD,
-  payload: confirmPassword
+export const authUpdateFields = fields => ({
+  type: AUTH_UPDATE_FIELDS,
+  payload: fields
 });
 
 export const authClearFields = () => ({ type: AUTH_CLEAR_FIELDS });
@@ -217,6 +213,10 @@ const INITIAL_STATE = {
   fetching: false,
   requireTwoFactor: false,
   fetchingTwoFactor: false,
+  facebookID: '',
+  profileImage: '',
+  firstName: '',
+  lastName: '',
   email: '',
   password: '',
   code: '',
@@ -258,14 +258,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, verifyTwofactor: false, uri: '' };
     case AUTH_VERIFY_TWO_FACTOR_FAILURE:
       return { ...state, verifyTwofactor: false };
-    case AUTH_UPDATE_EMAIL:
-      return { ...state, email: action.payload };
-    case AUTH_UPDATE_PASSWORD:
-      return { ...state, password: action.payload };
+    case AUTH_UPDATE_FIELDS:
+      return { ...state, ...action.payload };
     case AUTH_UPDATE_CODE:
       return { ...state, code: action.payload };
-    case AUTH_UPDATE_CONFIRM_PASSWORD:
-      return { ...state, confirmPassword: action.payload };
     case AUTH_PASSWORDS_DONT_MATCH:
       return { ...state, password: '', confirmPassword: '' };
     case AUTH_INVALID_EMAIL:

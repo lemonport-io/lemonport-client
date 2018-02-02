@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import QrReader from 'react-qr-reader';
 import Column from './Column';
-import cross from '../assets/cross.svg';
+import ButtonClose from './ButtonClose';
 import { colors } from '../styles';
 
 const StyledWrapper = styled.div`
@@ -17,22 +17,8 @@ const StyledWrapper = styled.div`
   background: rgb(${colors.black});
 `;
 
-const StyledClose = styled.img`
-  position: absolute;
+const StyledButtonClose = styled(ButtonClose)`
   z-index: 10;
-  top: 15px;
-  right: 15px;
-  width: 30px;
-  height: 30px;
-  mask: url(${cross}) center no-repeat;
-  mask-size: 95%;
-  background-color: rgba(${colors.white});
-
-  @media (hover: hover) {
-    &:hover {
-      opacity: 0.6;
-    }
-  }
 `;
 
 class QRCodeReader extends Component {
@@ -60,7 +46,7 @@ class QRCodeReader extends Component {
   render() {
     return (
       <StyledWrapper>
-        <StyledClose onClick={this.onClose} />
+        <StyledButtonClose white size={30} onClick={this.onClose} />
         <Column center>
           <QrReader
             delay={this.state.delay}

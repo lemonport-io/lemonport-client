@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import cross from '../assets/cross.svg';
 import { colors, shadows, transitions } from '../styles';
 
-const StyledAddButton = styled.button`
+const StyledButtonAdd = styled.button`
   transition: ${transitions.base};
   border: none;
   border-style: none;
@@ -24,7 +24,7 @@ const StyledAddButton = styled.button`
 
   @media (hover: hover) {
     &:hover {
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 `;
@@ -39,20 +39,20 @@ const StyledPlus = styled.img`
     outline || !dark ? `rgb(${colors.white})` : `rgb(${colors.lightGrey})`};
 `;
 
-const AddButton = ({ children, outline, dark, ...props }) => (
-  <StyledAddButton outline={outline} dark={dark} {...props}>
+const ButtonAdd = ({ children, outline, dark, ...props }) => (
+  <StyledButtonAdd outline={outline} dark={dark} {...props}>
     <StyledPlus outline={outline} dark={dark} />
-  </StyledAddButton>
+  </StyledButtonAdd>
 );
 
-AddButton.propTypes = {
+ButtonAdd.propTypes = {
   outline: PropTypes.bool,
   dark: PropTypes.bool
 };
 
-AddButton.defaultProps = {
+ButtonAdd.defaultProps = {
   outline: false,
   dark: false
 };
 
-export default AddButton;
+export default ButtonAdd;

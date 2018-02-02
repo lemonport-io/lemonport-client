@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Column from '../components/Column';
-import AddButton from '../components/AddButton';
+import ButtonAdd from '../components/ButtonAdd';
 import Account from '../components/Account';
 import Card from '../components/Card';
 import Modal from '../components/Modal';
@@ -20,6 +20,10 @@ import { modalOpen, modalClose } from '../reducers/_modal';
 import { warningClear } from '../reducers/_warning';
 import nativeCurrencies from '../libraries/native.json';
 
+const StyledColumn = styled(Column)`
+  padding-top: 14px;
+`;
+
 const StyledWrapper = styled.div`
   width: 100%;
   margin: 20px auto;
@@ -33,14 +37,14 @@ const StyledCard = styled(Card)`
 const StyledIndicator = styled(Indicator)`
   position: absolute;
   left: 5px;
-  top: -18px;
+  top: 0px;
   margin: 0;
 `;
 
 const StyledSelect = styled(Select)`
   position: absolute;
   right: 0;
-  top: -25px;
+  top: -7px;
   margin: 0;
 `;
 
@@ -59,7 +63,7 @@ class Dashboard extends Component {
   render() {
     return (
       <BaseLayout>
-        <Column>
+        <StyledColumn>
           <StyledIndicator
             fetching={this.props.fetching}
             action={this.props.dashboardGetAllAccounts}
@@ -76,9 +80,9 @@ class Dashboard extends Component {
             <StyledCard>Generate, Import or Add account bellow</StyledCard>
           )}
           <StyledWrapper>
-            <AddButton onClick={this.openNewAccountModal} />
+            <ButtonAdd onClick={this.openNewAccountModal} />
           </StyledWrapper>
-        </Column>
+        </StyledColumn>
         <Modal
           modal={this.props.modal}
           modalProps={this.props.modalProps}

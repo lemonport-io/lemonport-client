@@ -267,3 +267,28 @@ export const fromWei = wei => web3.utils.fromWei(String(wei));
  * @return {String}
  */
 export const toWei = ether => web3.utils.toWei(String(ether));
+
+/**
+ * @desc capitalise string
+ * @param {string} string
+ * @return {Void}
+ */
+export const capitalise = string => string.slice(0, 1).toUpperCase() + string.slice(1);
+
+/**
+ * @desc returns url parameter value
+ * @param  {String} parameter
+ * @param  {String} url
+ * @return {String}
+ */
+export const getUrlParameter = (
+  parameter,
+  url = typeof window !== 'undefined' ? window.location.href : ''
+) => {
+  let name = parameter.replace(/[[]]/g, '\\$&');
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+};

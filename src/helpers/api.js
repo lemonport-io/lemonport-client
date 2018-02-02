@@ -21,6 +21,13 @@ const api = axios.create({
 export const apiGetNetwork = () => api.get('/network');
 
 /**
+ * @desc check if user exists
+ * @param  {String} [email='']
+ * @return {Promise}
+ */
+export const apiCheckUser = (email = '') => api.post('/users/check-user', { email });
+
+/**
  * @desc signIn user
  * @param  {String} [email='']
  * @param  {String} [password='']
@@ -41,12 +48,16 @@ export const apiSignInTwoFactor = (email = '', password = '', code = '') =>
 
 /**
  * @desc signUp user
- * @param  {String} [email='']
- * @param  {String} [password='']
+ * @param  {Object} [{ firstName = '', lastName, email = '', password = '', facebookID = '' }]
  * @return {Promise}
  */
-export const apiSignUp = (email = '', password = '') =>
-  api.post('/users/signup', { email, password });
+export const apiSignUp = ({
+  firstName = '',
+  lastName,
+  email = '',
+  password = '',
+  facebookID = ''
+}) => api.post('/users/signup', { firstName, lastName, email, password, facebookID });
 
 /**
  * @desc get addresses

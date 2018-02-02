@@ -6,23 +6,9 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import cross from '../assets/cross.svg';
+import ButtonClose from '../components/ButtonClose';
 import { dashboardRenameAccount } from '../reducers/_dashboard';
 import { responsive } from '../styles';
-
-const StyledClose = styled.img`
-  position: absolute;
-  top: 5px;
-  right: 15px;
-  width: 18px;
-  height: 18px;
-
-  @media (hover: hover) {
-    &:hover {
-      opacity: 0.6;
-    }
-  }
-`;
 
 const StyledForm = styled(Form)`
   @media screen and (${responsive.sm.min}) {
@@ -44,7 +30,7 @@ class RenameAccountModal extends Component {
   };
   render = () => (
     <Card>
-      <StyledClose onClick={this.onClose} src={cross} />
+      <ButtonClose onClick={this.onClose} />
       <StyledForm onSubmit={this.onSubmit}>
         <h4>{`Rename wallet: ${this.props.modalProps.name}`}</h4>
         <Input

@@ -2,24 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Card from '../components/Card';
-
+import ButtonClose from '../components/ButtonClose';
 import QRCodeDisplay from '../components/QRCodeDisplay';
-import cross from '../assets/cross.svg';
 import { fonts, colors, responsive } from '../styles';
-
-const StyledClose = styled.img`
-  position: absolute;
-  top: 5px;
-  right: 15px;
-  width: 18px;
-  height: 18px;
-
-  @media (hover: hover) {
-    &:hover {
-      opacity: 0.6;
-    }
-  }
-`;
 
 const StyledAddress = styled.div`
   font-weight: ${fonts.weight.semibold};
@@ -40,7 +25,7 @@ class ReceiveEtherModal extends Component {
   };
   render = () => (
     <Card>
-      <StyledClose onClick={this.onClose} src={cross} />
+      <ButtonClose onClick={this.onClose} />
       <h4>{`Receive to ${this.props.modalProps.name}`}</h4>
       <QRCodeDisplay data={this.props.modalProps.address} />
       <StyledAddress>{this.props.modalProps.address}</StyledAddress>

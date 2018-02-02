@@ -5,24 +5,10 @@ import styled from 'styled-components';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import InputTwoFactor from '../components/InputTwoFactor';
-import cross from '../assets/cross.svg';
+import ButtonClose from '../components/ButtonClose';
 import { userCheckTwoFactor } from '../reducers/_user';
 import { dashboardDeleteAccount } from '../reducers/_dashboard';
 import { responsive } from '../styles';
-
-const StyledClose = styled.img`
-  position: absolute;
-  top: 5px;
-  right: 15px;
-  width: 18px;
-  height: 18px;
-
-  @media (hover: hover) {
-    &:hover {
-      opacity: 0.6;
-    }
-  }
-`;
 
 const StyledContent = styled.div`
   @media screen and (${responsive.sm.min}) {
@@ -56,7 +42,7 @@ class DeleteAccountModal extends Component {
   };
   render = () => (
     <Card>
-      <StyledClose onClick={this.onClose} src={cross} />
+      <ButtonClose onClick={this.onClose} />
       <StyledContent>
         <h4>{`Delete wallet: ${this.props.modalProps.name}`}</h4>
         <StyledParagraph>Are you sure you want to delete this wallet?</StyledParagraph>

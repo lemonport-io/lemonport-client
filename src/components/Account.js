@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import Button from '../components/Button';
-import TextButton from '../components/TextButton';
+import ButtonText from '../components/ButtonText';
 import PopUp from '../components/PopUp';
 import dots from '../assets/dots.svg';
 import { responsive, fonts, colors, transitions } from '../styles';
@@ -13,11 +13,11 @@ import { modalOpen } from '../reducers/_modal';
 import { notificationShow } from '../reducers/_notification';
 
 const StyledAddress = styled.div`
-  font-size: 12px;
+  font-size: ${fonts.size.small};
   opacity: 0.7;
   margin-top: 0;
   @media screen and (${responsive.sm.max}) {
-    font-size: 10px;
+    font-size: ${fonts.size.tiny};
   }
 `;
 
@@ -31,12 +31,20 @@ const StyledActions = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  & button {
+    width: 100%;
+  }
+  @media screen and (${responsive.sm.max}) {
+    & button {
+      font-size: ${fonts.size.h6};
+    }
+  }
 `;
 
 const StyledAccountType = styled.span`
   font-size: ${fonts.size.small};
   font-family: Roboto, sans-serif;
-  opacity: 0.6;
+  opacity: 0.7;
 `;
 
 const StyledBalance = styled.div`
@@ -62,7 +70,7 @@ const StyledSettings = styled.img`
   background-color: rgb(${colors.white});
   @media (hover: hover) {
     &:hover {
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 `;
@@ -88,6 +96,7 @@ class Account extends Component {
   toggleSettings = () => {
     this.setState({ openSettings: !this.state.openSettings });
   };
+  onBuyEther = () => window.browserHistory.push(`/buy-ether?address=${this.props.account.address}`);
   openSendModal = () =>
     this.props.modalOpen('SEND_ETHER', {
       name: this.props.account.name,
@@ -131,14 +140,14 @@ class Account extends Component {
   }
   render = () => (
     <StyledAccount>
-      <Card>
+      <Card outline>
         <StyledFlex>
           <StyledSettings onClick={this.toggleSettings} />
           <StyledPopUp show={this.state.openSettings}>
-            <TextButton onClick={this.openRenameAccountModal}>Rename</TextButton>
-            <TextButton color="red" onClick={this.openDeleteAccountModal}>
+            <ButtonText onClick={this.openRenameAccountModal}>Rename</ButtonText>
+            <ButtonText color="red" onClick={this.openDeleteAccountModal}>
               Delete
-            </TextButton>
+            </ButtonText>
           </StyledPopUp>
           <StyledFlex>
             <div>
@@ -164,8 +173,15 @@ class Account extends Component {
         </StyledFlex>
       </Card>
       <StyledActions>
-        <Button onClick={this.openSendModal}>Send</Button>
-        <Button onClick={this.openReceiveModal}>Receive</Button>
+        <Button outline onClick={this.openSendModal}>
+          Send
+        </Button>
+        <Button outline onClick={this.onBuyEther}>
+          Buy Ether
+        </Button>
+        <Button outline onClick={this.openReceiveModal}>
+          Receive
+        </Button>
       </StyledActions>
     </StyledAccount>
   );

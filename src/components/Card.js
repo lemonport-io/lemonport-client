@@ -7,17 +7,17 @@ import { colors, fonts, shadows, responsive } from '../styles';
 const StyledCard = styled.div`
   position: relative;
   width: 100%;
-  border: none;
   border-style: none;
-  color: rgb(${colors.dark});
-  background-color: rgb(${colors.white});
-  box-shadow: ${shadows.soft} rgba(${colors.dark}, 0.1);
   border-radius: 7px;
   font-size: ${fonts.size.medium};
   font-weight: ${fonts.weight.normal};
   padding: 30px 20px;
   margin: 5px auto;
   text-align: left;
+  color: ${({ outline }) => (outline ? `rgb(${colors.white})` : `rgb(${colors.dark})`)};
+  border: ${({ outline }) => (outline ? `1px solid rgb(${colors.white})` : 'none')};
+  box-shadow: ${({ outline }) => (outline ? 'none' : `${shadows.soft} rgba(${colors.dark}), 0.1)`)};
+  background-color: ${({ outline }) => (outline ? 'transparent' : `rgb(${colors.white})`)};
   & > * {
     margin-top: 10px;
   }
@@ -26,17 +26,21 @@ const StyledCard = styled.div`
   }
 `;
 
-const Card = ({ fetching, children, ...props }) => (
-  <StyledCard {...props}>{fetching ? <Loader background={'white'} /> : children}</StyledCard>
+const Card = ({ fetching, outline, children, ...props }) => (
+  <StyledCard outline={outline} {...props}>
+    {fetching ? <Loader background={'white'} /> : children}
+  </StyledCard>
 );
 
 Card.propTypes = {
   children: PropTypes.node.isRequired,
-  fetching: PropTypes.bool
+  fetching: PropTypes.bool,
+  outline: PropTypes.bool
 };
 
 Card.defaultProps = {
-  fetching: false
+  fetching: false,
+  outline: false
 };
 
 export default Card;

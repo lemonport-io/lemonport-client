@@ -9,11 +9,13 @@ export const colors = {
   lightBlue: '128, 212, 255',
   gold: '246, 203, 71',
   green: '79, 180, 128',
-  red: '221, 69, 65'
+  red: '221, 69, 65',
+  facebook: '74, 103, 173'
 };
 
 export const fonts = {
   size: {
+    tiny: '10px',
     small: '12px',
     medium: '16px',
     large: '18px',
@@ -96,7 +98,6 @@ export const globalStyles = `
   button:active,
   button:focus,
   button.active {
-    background-image: none;
     outline: 0;
     -webkit-box-shadow: none;
             box-shadow: none;
@@ -109,27 +110,27 @@ export const globalStyles = `
 
   a, p, h1, h2, h3, h4, h5, h6 {
   	text-decoration: none;
-  	margin: 0;
+  	margin: 0.5em 0;
   	padding: 0;
   }
 
   h1 {
-    font-size: ${fonts.size.h1}
+    font-size: ${fonts.size.h1};
   }
   h2 {
-    font-size: ${fonts.size.h2}
+    font-size: ${fonts.size.h2};
   }
   h3 {
-    font-size: ${fonts.size.h3}
+    font-size: ${fonts.size.h3};
   }
   h4 {
-    font-size: ${fonts.size.h4}
+    font-size: ${fonts.size.h4};
   }
   h5 {
-    font-size: ${fonts.size.h5}
+    font-size: ${fonts.size.h5};
   }
   h6 {
-    font-size: ${fonts.size.h6}
+    font-size: ${fonts.size.h6};
   }
 
   a {
@@ -182,11 +183,11 @@ export const globalStyles = `
 
   #coinbase_button_iframe {
     width: 244px !important;
-    margin-top: 40px !important;
+    margin-top: 20px !important;
   }
 
   #coinbase_widget {
     display: inline-block;
-    margin-top: 56px !important;
+    margin-top: 36px !important;
   }
 `;

@@ -13,7 +13,7 @@ const StyledReload = styled.img`
 
   @media (hover: hover) {
     &:hover {
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 `;
