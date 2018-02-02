@@ -1,7 +1,7 @@
 // -- Constants ------------------------------------------------------------- //
 
-const MODAL_OPEN = 'dashboard/MODAL_OPEN';
-const MODAL_CLOSE = 'dashboard/MODAL_CLOSE';
+const MODAL_OPEN = 'overview/MODAL_OPEN';
+const MODAL_CLOSE = 'overview/MODAL_CLOSE';
 
 // -- Actions --------------------------------------------------------------- //
 

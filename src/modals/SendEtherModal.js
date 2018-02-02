@@ -420,7 +420,7 @@ SendEtherModal.propTypes = {
   twoFactor: PropTypes.bool.isRequired
 };
 
-const reduxProps = ({ send, user, dashboard }) => ({
+const reduxProps = ({ send, user, overview }) => ({
   fetching: send.fetching,
   recipient: send.recipient,
   amount: send.amount,

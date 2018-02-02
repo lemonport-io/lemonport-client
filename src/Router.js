@@ -36,8 +36,8 @@ const SignOut = Loadable({
   loading: () => null
 });
 
-const Dashboard = Loadable({
-  loader: () => import('./pages/Dashboard'),
+const Overview = Loadable({
+  loader: () => import('./pages/Overview'),
   loading: () => null
 });
 
@@ -65,7 +65,7 @@ class Router extends Component {
           render={routerProps => {
             const session = getSession();
             if (session && session.expires > Date.now()) {
-              return <Redirect to="/dashboard" />;
+              return <Redirect to="/overview" />;
             } else if (session && session.expires < Date.now()) {
               return <Redirect to="/signout" />;
             }
@@ -78,7 +78,7 @@ class Router extends Component {
           render={routerProps => {
             const session = getSession();
             if (session && session.expires > Date.now()) {
-              return <Redirect to="/dashboard" />;
+              return <Redirect to="/overview" />;
             } else if (session && session.expires < Date.now()) {
               return <Redirect to="/signout" />;
             }
@@ -91,7 +91,7 @@ class Router extends Component {
           render={routerProps => {
             const session = getSession();
             if (session && session.expires > Date.now()) {
-              return <Redirect to="/dashboard" />;
+              return <Redirect to="/overview" />;
             } else if (session && session.expires < Date.now()) {
               return <Redirect to="/signout" />;
             }
@@ -104,7 +104,7 @@ class Router extends Component {
           render={routerProps => {
             const session = getSession();
             if (session.twoFactor) {
-              return <Redirect to="/dashboard" />;
+              return <Redirect to="/overview" />;
             }
             return <SetupTwoFactor {...routerProps} />;
           }}
@@ -124,13 +124,13 @@ class Router extends Component {
         <Route exact path="/verify/:hash" component={Verify} />
         <Route
           exact
-          path="/dashboard"
+          path="/overview"
           render={routerProps => {
             const session = getSession();
             if (!session || session.expires < Date.now()) {
               return <Redirect to="/" />;
             }
-            return <Dashboard {...routerProps} />;
+            return <Overview {...routerProps} />;
           }}
         />
         <Route component={NotFound} />

@@ -74,7 +74,7 @@ export const authSignIn = (email, password) => dispatch => {
       const crypto = flattenTokens(accounts);
       setSession({ token, email, expires, verified, twoFactor, accounts, crypto });
       dispatch({ type: AUTH_SIGNIN_SUCCESS });
-      window.browserHistory.push('/dashboard');
+      window.browserHistory.push('/overview');
     })
     .catch(error => {
       if (error.message === 'TWO_FACTOR_CODE_MISSING') {
@@ -99,7 +99,7 @@ export const authSignInTwoFactor = (email, password, code) => (dispatch, getStat
       const crypto = flattenTokens(accounts);
       setSession({ token, email, expires, verified, twoFactor, accounts, crypto });
       dispatch({ type: AUTH_SIGNIN_TWO_FACTOR_SUCCESS });
-      window.browserHistory.push('/dashboard');
+      window.browserHistory.push('/overview');
     })
     .catch(error => {
       if (error.response.status === 400 || error.response.status === 401) {
@@ -180,7 +180,7 @@ export const authEnableTwoFactor = code => dispatch => {
     .then(() => {
       updateSession({ twoFactor: true });
       dispatch({ type: AUTH_ENABLE_TWO_FACTOR_SUCCESS, payload: true });
-      window.browserHistory.push('/dashboard');
+      window.browserHistory.push('/overview');
     })
     .catch(error => {
       console.error(error);

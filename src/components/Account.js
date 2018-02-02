@@ -124,9 +124,9 @@ Account.propTypes = {
   nativeCurrency: PropTypes.string.isRequired
 };
 
-const reduxProps = ({ dashboard }) => ({
-  prices: dashboard.prices,
-  nativeCurrency: dashboard.nativeCurrency
+const reduxProps = ({ overview }) => ({
+  prices: overview.prices,
+  nativeCurrency: overview.nativeCurrency
 });
 
 export default connect(reduxProps, {

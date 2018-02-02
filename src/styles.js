@@ -76,16 +76,13 @@ export const globalStyles = `
   }
 
   body {
-    background: rgb(${colors.blue});
-    background: -moz-linear-gradient(top, rgb(${colors.blue}) 0%,  rgb(${colors.lightBlue}) 100%);
-    background: -webkit-linear-gradient(top, rgb(${colors.blue}) 0%, rgb(${colors.lightBlue}) 100%);
-    background: linear-gradient(to bottom, rgb(${colors.blue}) 0%, rgb(${colors.lightBlue}) 100%);
+    background: rgb(${colors.white});
     font-family: Roboto, sans-serif;
     font-weight: ${fonts.weight.normal};
     font-style: normal;
   	font-stretch: normal;
     font-size: ${fonts.size.medium};
-    color: rgb(${colors.white});
+    color: rgb(${colors.dark});
     overflow-y:auto;
     text-rendering: optimizeLegibility;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

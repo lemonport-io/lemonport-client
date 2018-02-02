@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Link from '../components/Link';
 import Loader from '../components/Loader';
 import Column from '../components/Column';
-import PopUp from '../components/PopUp';
-import Button from '../components/Button';
 import lemonportWhite from '../assets/lemonport-white.svg';
-import { getSession } from '../helpers/utilities';
-import { responsive } from '../styles';
+import { colors, responsive } from '../styles';
 
 const StyledBaseLayout = styled.div`
   width: 100vw;
+  height: 100vh;
   padding: 120px 10px;
   text-align: center;
+  color: rgb(${colors.white});
+  background: rgb(${colors.blue});
+  background: linear-gradient(to bottom, rgb(${colors.blue}) 0%, rgb(${colors.lightBlue}) 100%);
   @media screen and (${responsive.md.max}) {
     padding: 60px 10px;
   }
@@ -38,56 +39,18 @@ const StyledContent = styled.div`
   align-items: ${({ fetching }) => (fetching ? 'center' : 'flex-start')};
   min-height: ${({ fetching }) => (fetching ? '250px' : 0)};
 `;
-
-const StyledLogoWrapper = styled.div`
-  width: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledButton = styled(Button)`
-  margin-top: 20px;
-`;
-
-class BaseLayout extends Component {
-  state = {
-    openPopUp: false
-  };
-  togglePopUp = () => this.setState({ openPopUp: !this.state.openPopUp });
-  render() {
-    const isDashboard = window.browserHistory
-      ? window.browserHistory.location.pathname === '/dashboard'
-      : false;
-    return (
-      <StyledBaseLayout>
-        <Column>
-          <StyledHeader>
-            {isDashboard ? (
-              <StyledLogoWrapper>
-                <StyledLogo src={lemonportWhite} alt="logo" onClick={this.togglePopUp} />
-                <PopUp show={this.state.openPopUp}>
-                  <p>{getSession().email}</p>
-                  <Link to="/signout">
-                    <StyledButton dark>Sign Out</StyledButton>
-                  </Link>
-                </PopUp>
-              </StyledLogoWrapper>
-            ) : (
-              <Link to="/">
-                <StyledLogo src={lemonportWhite} alt="logo" />
-              </Link>
-            )}
-          </StyledHeader>
-          <StyledContent fetching={this.props.fetching}>
-            {this.props.fetching ? <Loader /> : this.props.children}
-          </StyledContent>
-        </Column>
-      </StyledBaseLayout>
-    );
-  }
-}
+const BaseLayout = ({ fetching, children, ...props }) => (
+  <StyledBaseLayout {...props}>
+    <Column>
+      <StyledHeader>
+        <Link to="/">
+          <StyledLogo src={lemonportWhite} alt="logo" />
+        </Link>
+      </StyledHeader>
+      <StyledContent fetching={fetching}>{fetching ? <Loader /> : children}</StyledContent>
+    </Column>
+  </StyledBaseLayout>
+);
 
 BaseLayout.propTypes = {
   fetching: PropTypes.bool.isRequired,

@@ -52,7 +52,7 @@ class BuyEther extends Component {
       if (e.data.status === 'buy_completed') {
         console.log('buy_completed');
         // TODO
-        // Success message and redirect to dashboard
+        // Success message and redirect to overview
       } else if (e.data.status === 'buy_canceled') {
         console.log('buy_canceled');
         // TODO
@@ -97,7 +97,7 @@ class BuyEther extends Component {
               Buy ETH with Coinbase
             </a>
             <StyledActions>
-              <StyledLink to="/dashboard">Skip</StyledLink>
+              <StyledLink to="/overview">Skip</StyledLink>
             </StyledActions>
           </StyledWrapper>
         ) : (
