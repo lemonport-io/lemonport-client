@@ -69,6 +69,33 @@ export const apiGetAllAccounts = () => {
 };
 
 /**
+ * @desc get a single account
+ * @param  {String}   [currency='']
+ * @return {Promise}
+ */
+export const apiGetSingleAccount = (currency = '') => {
+  const sessionToken = getSession().token;
+  return api.get(`/accounts/${currency}`, { headers: { Authorization: sessionToken } });
+};
+
+/**
+ * @desc send ether to recipient
+ * @param  {String}   [address='']
+ * @param  {String}   [recipient='']
+ * @param  {String}   [amount='']
+ * @param  {String}   [code='']
+ * @return {Promise}
+ */
+export const apiSendBitcoin = (address = '', recipient = '', amount = '', code = '') => {
+  const sessionToken = getSession().token;
+  return api.post(
+    '/ethereum/send-bitcoin',
+    { from: address, to: recipient, value: amount, code },
+    { headers: { Authorization: sessionToken } }
+  );
+};
+
+/**
  * @desc send ether to recipient
  * @param  {String}   [address='']
  * @param  {String}   [recipient='']
@@ -208,3 +235,10 @@ export const apiVerifyTwoFactor = (code = '') => {
  * @return {Promise}
  */
 export const apiGetGasPrices = () => axios.get(`https://ethgasstation.info/json/ethgasAPI.json`);
+
+/**
+ * @desc get bitcoin tx fee estimate
+ * @return {Promise}
+ */
+export const apiGetBitcoinTxFeeEstimate = () =>
+  axios.get(`https://bitcoinfees.earn.com/api/v1/fees/recommended`);

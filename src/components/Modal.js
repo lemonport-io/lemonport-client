@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Column from '../components/Column';
-import SendEtherModal from '../modals/SendEtherModal';
-import ReceiveEtherModal from '../modals/ReceiveEtherModal';
+import SendModal from '../modals/SendModal';
+import ReceiveModal from '../modals/ReceiveModal';
 import SetupTwoFactorModal from '../modals/SetupTwoFactorModal';
 import { colors, transitions } from '../styles';
 
@@ -27,16 +27,11 @@ const StyledLightbox = styled.div`
 class Modal extends Component {
   modalController = () => {
     switch (this.props.modal) {
-      case 'SEND_ETHER':
+      case 'SEND':
+        return <SendModal modalProps={this.props.modalProps} closeModal={this.props.closeModal} />;
+      case 'RECEIVE':
         return (
-          <SendEtherModal modalProps={this.props.modalProps} closeModal={this.props.closeModal} />
-        );
-      case 'RECEIVE_ETHER':
-        return (
-          <ReceiveEtherModal
-            modalProps={this.props.modalProps}
-            closeModal={this.props.closeModal}
-          />
+          <ReceiveModal modalProps={this.props.modalProps} closeModal={this.props.closeModal} />
         );
       case 'SETUP_TWO_FACTOR':
         return (
@@ -52,9 +47,9 @@ class Modal extends Component {
   render = () => {
     const body = document.body || document.getElementsByTagName('body')[0];
     if (this.props.modal) {
-      body.style.overflow = 'hidden';
+      body.style['overflow-y'] = 'hidden';
     } else {
-      body.style.overflow = 'auto';
+      body.style['overflow-y'] = 'auto';
     }
     return (
       <StyledLightbox modal={this.props.modal}>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Card from '../components/Card';
 import ButtonClose from '../components/ButtonClose';
 import QRCodeDisplay from '../components/QRCodeDisplay';
+import currencies from '../libraries/currencies.json';
 import { fonts, colors, responsive } from '../styles';
 
 const StyledAddress = styled.div`
@@ -19,23 +20,23 @@ const StyledAddress = styled.div`
   }
 `;
 
-class ReceiveEtherModal extends Component {
+class ReceiveModal extends Component {
   onClose = () => {
     this.props.closeModal();
   };
   render = () => (
     <Card>
       <ButtonClose onClick={this.onClose} />
-      <h4>{`Receive to ${this.props.modalProps.name}`}</h4>
+      <h4>{`Receive ${currencies[this.props.modalProps.currency].name}`}</h4>
       <QRCodeDisplay data={this.props.modalProps.address} />
       <StyledAddress>{this.props.modalProps.address}</StyledAddress>
     </Card>
   );
 }
 
-ReceiveEtherModal.propTypes = {
+ReceiveModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
   modalProps: PropTypes.object.isRequired
 };
 
-export default ReceiveEtherModal;
+export default ReceiveModal;

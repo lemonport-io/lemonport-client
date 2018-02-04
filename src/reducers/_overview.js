@@ -1,8 +1,14 @@
-import { apiGetAllAccounts, apiGetNetwork, apiGetPrices } from '../helpers/api';
+import {
+  apiGetAllAccounts,
+  apiGetSingleAccount,
+  apiGetNetwork,
+  apiGetPrices
+} from '../helpers/api';
 import {
   capitalize,
-  flattenTokens,
   updateSession,
+  updateAccounts,
+  convertToNative,
   getSession,
   parseError,
   saveLocal
@@ -17,6 +23,10 @@ const OVERVIEW_GET_ALL_ACCOUNTS_REQUEST = 'overview/OVERVIEW_GET_ALL_ACCOUNTS_RE
 const OVERVIEW_GET_ALL_ACCOUNTS_SUCCESS = 'overview/OVERVIEW_GET_ALL_ACCOUNTS_SUCCESS';
 const OVERVIEW_GET_ALL_ACCOUNTS_FAILURE = 'overview/OVERVIEW_GET_ALL_ACCOUNTS_FAILURE';
 
+const OVERVIEW_GET_SINGLE_ACCOUNT_REQUEST = 'overview/OVERVIEW_GET_SINGLE_ACCOUNT_REQUEST';
+const OVERVIEW_GET_SINGLE_ACCOUNT_SUCCESS = 'overview/OVERVIEW_GET_SINGLE_ACCOUNT_SUCCESS';
+const OVERVIEW_GET_SINGLE_ACCOUNT_FAILURE = 'overview/OVERVIEW_GET_SINGLE_ACCOUNT_FAILURE';
+
 const OVERVIEW_GET_PRICES_REQUEST = 'overview/OVERVIEW_GET_PRICES_REQUEST';
 const OVERVIEW_GET_PRICES_SUCCESS = 'overview/OVERVIEW_GET_PRICES_SUCCESS';
 const OVERVIEW_GET_PRICES_FAILURE = 'overview/OVERVIEW_GET_PRICES_FAILURE';
@@ -30,7 +40,7 @@ let getPricesInterval = null;
 export const overviewGetPrices = () => (dispatch, getState) => {
   const { overview } = getState();
   const native = overview.nativeCurrency;
-  const crypto = overview.crypto.length ? overview.crypto : getSession().crypto;
+  const crypto = ['ETH', 'BTC', 'LTC'];
   const getPrices = () => {
     dispatch({ type: OVERVIEW_GET_PRICES_REQUEST, payload: overview.nativeCurrency });
     apiGetPrices(crypto, native)
@@ -74,11 +84,16 @@ export const overviewGetAllAccounts = () => dispatch => {
   apiGetAllAccounts()
     .then(({ data }) => {
       const accounts = data.accounts;
-      const crypto = flattenTokens(data.accounts);
-      updateSession({ accounts, crypto });
+      updateSession({ accounts });
+      const totalBalance = String(
+        accounts.reduce(
+          (result, current) => result + convertToNative(current.balance, current.currency).value,
+          0
+        )
+      );
       dispatch({
         type: OVERVIEW_GET_ALL_ACCOUNTS_SUCCESS,
-        payload: { accounts, crypto }
+        payload: { accounts, totalBalance }
       });
       dispatch(overviewGetPrices());
     })
@@ -89,15 +104,40 @@ export const overviewGetAllAccounts = () => dispatch => {
     });
 };
 
+export const overviewGetSingleAccount = currency => dispatch => {
+  dispatch({ type: OVERVIEW_GET_SINGLE_ACCOUNT_REQUEST, payload: currency });
+  apiGetSingleAccount(currency)
+    .then(({ data }) => {
+      const account = data.account;
+      const accounts = updateAccounts(account);
+      const totalBalance = String(
+        accounts.reduce(
+          (result, current) => result + convertToNative(current.balance, current.currency).value,
+          0
+        )
+      );
+      dispatch({
+        type: OVERVIEW_GET_SINGLE_ACCOUNT_SUCCESS,
+        payload: { accounts, totalBalance }
+      });
+      dispatch(overviewGetPrices());
+    })
+    .catch(error => {
+      const message = parseError(error);
+      dispatch(notificationShow(message, true));
+      dispatch({ type: OVERVIEW_GET_SINGLE_ACCOUNT_FAILURE });
+    });
+};
+
 export const overviewDisplayAccounts = () => dispatch => {
   const session = getSession();
+  dispatch(overviewGetPrices());
   dispatch(overviewGetNetwork());
   if (session.accounts) {
     dispatch({
       type: OVERVIEW_GET_ACCOUNTS_FROM_SESSION,
       payload: session.accounts
     });
-    dispatch(overviewGetPrices());
     dispatch(overviewGetAllAccounts());
   } else {
     dispatch(overviewGetAllAccounts());
@@ -114,12 +154,12 @@ export const overviewChangeNativeCurrency = nativeCurrency => dispatch => {
 
 // -- Reducer --------------------------------------------------------------- //
 const INITIAL_STATE = {
-  fetching: false,
+  fetching: '',
   accounts: [],
+  totalBalance: '',
   nativePriceRequest: '',
   nativeCurrency: 'USD',
   error: false,
-  crypto: [],
   prices: {}
 };
 
@@ -131,16 +171,20 @@ export default (state = INITIAL_STATE, action) => {
         accounts: action.payload
       };
     case OVERVIEW_GET_ALL_ACCOUNTS_REQUEST:
-      return { ...state, fetching: true, error: false };
+      return { ...state, fetching: 'all', error: false };
+    case OVERVIEW_GET_SINGLE_ACCOUNT_REQUEST:
+      return { ...state, fetching: action.payload, error: false };
     case OVERVIEW_GET_ALL_ACCOUNTS_SUCCESS:
+    case OVERVIEW_GET_SINGLE_ACCOUNT_SUCCESS:
       return {
         ...state,
-        fetching: false,
+        fetching: '',
         accounts: action.payload.accounts,
-        crypto: action.payload.crypto
+        totalBalance: action.payload.totalBalance
       };
     case OVERVIEW_GET_ALL_ACCOUNTS_FAILURE:
-      return { ...state, fetching: false, error: true };
+    case OVERVIEW_GET_SINGLE_ACCOUNT_FAILURE:
+      return { ...state, fetching: '', error: true };
     case OVERVIEW_GET_PRICES_REQUEST:
       return {
         ...state,

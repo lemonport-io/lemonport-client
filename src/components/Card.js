@@ -2,32 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Loader from '../components/Loader';
-import { colors, fonts, shadows, responsive } from '../styles';
+import { colors, fonts, shadows } from '../styles';
 
 const StyledCard = styled.div`
   position: relative;
   width: 100%;
+  border: none;
   border-style: none;
   border-radius: 7px;
   font-size: ${fonts.size.medium};
   font-weight: ${fonts.weight.normal};
-  padding: 30px 20px;
-  margin: 5px auto;
+  padding: 15px;
+  margin: 0 auto;
   text-align: left;
-  color: ${({ outline }) => (outline ? `rgb(${colors.white})` : `rgb(${colors.dark})`)};
-  border: ${({ outline }) => (outline ? `1px solid rgb(${colors.white})` : 'none')};
-  box-shadow: ${({ outline }) => (outline ? 'none' : `${shadows.soft} rgba(${colors.dark}), 0.1)`)};
-  background-color: ${({ outline }) => (outline ? 'transparent' : `rgb(${colors.white})`)};
+  color: ${({ color }) => (color ? `rgb(${colors.white})` : `rgb(${colors.dark})`)};
+  box-shadow: ${shadows.soft} rgba(${colors.dark}, 0.1);
+  background-color: ${({ color }) => (color ? `rgb(${colors[color]})` : `rgb(${colors.white})`)};
   & > * {
     margin-top: 10px;
   }
-  @media screen and (${responsive.sm.max}) {
-    padding: 15px 10px;
-  }
 `;
 
-const Card = ({ fetching, outline, children, ...props }) => (
-  <StyledCard outline={outline} {...props}>
+const Card = ({ fetching, color, children, ...props }) => (
+  <StyledCard color={color} {...props}>
     {fetching ? <Loader background={'white'} /> : children}
   </StyledCard>
 );
@@ -35,12 +32,12 @@ const Card = ({ fetching, outline, children, ...props }) => (
 Card.propTypes = {
   children: PropTypes.node.isRequired,
   fetching: PropTypes.bool,
-  outline: PropTypes.bool
+  color: PropTypes.string
 };
 
 Card.defaultProps = {
   fetching: false,
-  outline: false
+  color: ''
 };
 
 export default Card;

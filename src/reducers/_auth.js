@@ -6,13 +6,7 @@ import {
   apiRequestTwoFactor,
   apiEnableTwoFactor
 } from '../helpers/api';
-import {
-  setSession,
-  deleteSession,
-  updateSession,
-  flattenTokens,
-  parseError
-} from '../helpers/utilities';
+import { setSession, deleteSession, updateSession, parseError } from '../helpers/utilities';
 import { isValidEmail } from '../helpers/validators';
 import { notificationShow } from './_notification';
 
@@ -57,7 +51,7 @@ const AUTH_INVALID_EMAIL_OR_PASSWORD = 'auth/AUTH_INVALID_EMAIL_OR_PASSWORD';
 
 // -- Actions --------------------------------------------------------------- //
 
-export const authSignIn = (email, password) => dispatch => {
+export const authSignIn = (email, password) => (dispatch, getState) => {
   if (!isValidEmail(email)) {
     dispatch(notificationShow(`Email is not valid`, true));
     dispatch({ type: AUTH_INVALID_EMAIL });
@@ -70,11 +64,22 @@ export const authSignIn = (email, password) => dispatch => {
         dispatch({ type: AUTH_REQUIRE_TWO_FACTOR });
         return;
       }
-      const { token, email, expires, verified, twoFactor, accounts } = data;
-      const crypto = flattenTokens(accounts);
-      setSession({ token, email, expires, verified, twoFactor, accounts, crypto });
-      dispatch({ type: AUTH_SIGNIN_SUCCESS });
-      window.browserHistory.push('/overview');
+      console.log(data);
+      setSession({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        facebookID: data.facebookID,
+        token: data.token,
+        email: data.email,
+        expires: data.expires,
+        verified: data.verified,
+        twoFactor: data.twoFactor,
+        accounts: data.accounts
+      });
+      dispatch({
+        type: AUTH_SIGNIN_SUCCESS
+      });
+      window.browserHistory.push('/setup-two-factor');
     })
     .catch(error => {
       if (error.message === 'TWO_FACTOR_CODE_MISSING') {
@@ -95,10 +100,21 @@ export const authSignInTwoFactor = (email, password, code) => (dispatch, getStat
   dispatch({ type: AUTH_SIGNIN_TWO_FACTOR_REQUEST });
   apiSignInTwoFactor(email, password, code)
     .then(({ data }) => {
-      const { token, email, expires, verified, twoFactor, accounts } = data;
-      const crypto = flattenTokens(accounts);
-      setSession({ token, email, expires, verified, twoFactor, accounts, crypto });
-      dispatch({ type: AUTH_SIGNIN_TWO_FACTOR_SUCCESS });
+      console.log(data);
+      setSession({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        facebookID: data.facebookID,
+        token: data.token,
+        email: data.email,
+        expires: data.expires,
+        verified: data.verified,
+        twoFactor: data.twoFactor,
+        accounts: data.accounts
+      });
+      dispatch({
+        type: AUTH_SIGNIN_TWO_FACTOR_SUCCESS
+      });
       window.browserHistory.push('/overview');
     })
     .catch(error => {
@@ -120,7 +136,7 @@ export const authSignUp = ({
   password,
   confirmPassword,
   facebookID
-}) => dispatch => {
+}) => (dispatch, getState) => {
   if (!isValidEmail(email)) {
     dispatch(notificationShow(`Email is invalid`, true));
     dispatch({ type: AUTH_INVALID_EMAIL });
@@ -134,9 +150,21 @@ export const authSignUp = ({
   dispatch({ type: AUTH_SIGNUP_REQUEST });
   apiSignUp({ firstName, lastName, email, password, facebookID })
     .then(({ data }) => {
-      const { token, email, expires, verified, accounts } = data;
-      setSession({ token, email, expires, verified, accounts });
-      dispatch({ type: AUTH_SIGNUP_SUCCESS });
+      console.log(data);
+      setSession({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        facebookID: data.facebookID,
+        token: data.token,
+        email: data.email,
+        expires: data.expires,
+        verified: data.verified,
+        twoFactor: data.twoFactor,
+        accounts: data.accounts
+      });
+      dispatch({
+        type: AUTH_SIGNUP_SUCCESS
+      });
       window.browserHistory.push('/setup-two-factor');
     })
     .catch(error => {
@@ -234,7 +262,7 @@ export default (state = INITIAL_STATE, action) => {
     case AUTH_SIGNIN_SUCCESS:
     case AUTH_SIGNIN_TWO_FACTOR_SUCCESS:
     case AUTH_SIGNOUT:
-      return { ...state, ...INITIAL_STATE };
+      return { ...state, fetching: false };
     case AUTH_REQUEST_TWO_FACTOR_SUCCESS:
       return { ...state, fetching: false, uri: action.payload };
     case AUTH_SIGNUP_FAILURE:
@@ -268,7 +296,7 @@ export default (state = INITIAL_STATE, action) => {
     case AUTH_INVALID_EMAIL_OR_PASSWORD:
       return { ...state, email: '', password: '', requireTwoFactor: false, code: '' };
     case AUTH_CLEAR_FIELDS:
-      return { ...state, email: '', password: '', confirmPassword: '' };
+      return { ...state, ...INITIAL_STATE };
     default:
       return state;
   }

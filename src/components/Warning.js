@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import { colors } from '../styles';
 
 const StyledWrapper = styled.div`
-  position: absolute;
-  top: 0;
   width: 100vw;
   opacity: ${({ show }) => (show ? 1 : 0)};
   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};

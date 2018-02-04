@@ -19,6 +19,7 @@ class InputTwoFactor extends Component {
         type={this.props.type || 'text'}
         value={this.props.value}
         onChange={this._onChange}
+        transparent={this.props.transparent}
       />
     );
   }

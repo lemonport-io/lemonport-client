@@ -7,7 +7,6 @@ import Button from '../components/Button';
 import Form from '../components/Form';
 import BaseLayout from '../layout/base';
 import { authSignUp, authUpdateFields, authClearFields } from '../reducers/_auth';
-import { initFB, checkStatusFB, fetchFB } from '../helpers/facebook';
 
 const StyledForm = styled(Form)`
   padding: 20px;
@@ -26,35 +25,11 @@ const StyledProfile = styled.div`
   }
   & p {
     font-weight: 700;
+    font-size: 24px;
   }
 `;
 
 class SignUp extends Component {
-  componentDidMount() {
-    initFB().then(() =>
-      checkStatusFB()
-        .then(response => {
-          if (response.status === 'connected') {
-            fetchFB('/me?fields=id,email,first_name,last_name').then(data => {
-              const { id, email, first_name, last_name } = data;
-              this.props.authUpdateFields({
-                email,
-                facebookID: id,
-                firstName: first_name,
-                lastName: last_name
-              });
-            });
-            fetchFB('me/picture?type=large').then(({ data }) => {
-              this.props.authUpdateFields({
-                profileImage: data.url
-              });
-            });
-          } else {
-          }
-        })
-        .catch(error => console.error(error))
-    );
-  }
   onSubmit = e => {
     e.preventDefault();
     const { firstName, lastName, email, password, confirmPassword, facebookID } = this.props;

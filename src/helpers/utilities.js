@@ -19,34 +19,52 @@ export const saveLocal = (key = '', data = {}) => localStorage.setItem(key, JSON
 export const getLocal = (key = '', data = {}) => JSON.parse(localStorage.getItem(key));
 
 /**
+ * @desc get random rgb string
+ * @return {Object}
+ */
+export const randomRGB = () =>
+  `${Math.ceil(Math.random() * 255)}, ${Math.ceil(Math.random() * 255)}, ${Math.ceil(
+    Math.random() * 255
+  )}`;
+
+/**
  * @desc create authenticated user session
  * @param  {String}   [token='']
+ * @param  {String}   [firstName='']
+ * @param  {String}   [lastName='']
+ * @param  {String}   [facebookID='']
+ * @param  {String}   [profileImage='']
  * @param  {String}   [email='']
  * @param  {Boolean}  [verified=false]
  * @param  {Boolean}  [twoFactor=false]
  * @param  {Date}     [expires=Date.now() + 180000]
  * @param  {Array}    [accounts=[]]
- * @param  {Array}    [crypto=[]]
  * @param
  * @return {Session}
  */
 export const setSession = ({
   token = '',
+  firstName = '',
+  lastName = '',
+  facebookID = '',
+  profileImage = '',
   email = '',
   verified = false,
   twoFactor = false,
   expires = Date.now() + 1800000, // 30mins
-  accounts = [],
-  crypto = []
+  accounts = []
 }) => {
   const session = {
     token,
+    firstName,
+    lastName,
+    facebookID,
+    profileImage,
     email,
     verified,
     twoFactor,
     expires,
-    accounts,
-    crypto
+    accounts
   };
   setTimeout(() => window.browserHistory.push('/signout'), 1800000); // 30mins
   localStorage.setItem('USER_SESSION', JSON.stringify(session));
@@ -69,25 +87,6 @@ export const getSession = () => {
 export const updateSession = updatedSession => {
   const newSession = { ...getSession(), ...updatedSession };
   return localStorage.setItem('USER_SESSION', JSON.stringify(newSession));
-};
-
-/**
- * @desc flatten tokens
- * @param  {Object} [accounts]
- * @return {String}
- */
-export const flattenTokens = accounts => {
-  const crypto = ['ETH'];
-  for (let i = 0; i < accounts.length; i++) {
-    if (accounts[i].tokens) {
-      for (let j = 0; j < accounts[i].tokens.length; j++) {
-        if (!crypto.includes(accounts[i].tokens[j].symbol)) {
-          crypto.push(accounts[i].tokens[j].symbol);
-        }
-      }
-    }
-  }
-  return crypto;
 };
 
 /**
@@ -116,9 +115,8 @@ export const updateAccounts = (account = null, address = '') => {
   if (account && isNew) {
     accounts.push(account);
   }
-  const crypto = flattenTokens(accounts);
-  updateSession({ accounts, crypto });
-  return { accounts, crypto };
+  updateSession({ accounts });
+  return accounts;
 };
 
 /**
@@ -165,7 +163,7 @@ export const decrypt = (string, secret) => {
 };
 
 /**
- * @desc convert ether to current native currency
+ * @desc convert crypto currency value to current native currency
  * @param  {String} [value='']
  * @param  {String} [crypto='ETH']
  * @return {String}
@@ -176,8 +174,24 @@ export const convertToNative = (value = '', crypto = 'ETH') => {
   const unformatted = `${Number(value) * Number(prices[crypto])}`;
   const native = prices.native;
   const decimals = native === 'ETH' || native === 'BTC' ? 8 : 2;
-  const formatted = BigNumber(unformatted).toFormat(decimals);
-  return `${formatted} ${native}`;
+  const formatted = BigNumber(Number(unformatted).toFixed(15)).toFormat(decimals);
+  return {
+    value: Number(unformatted),
+    formatted,
+    string: `${formatted} ${native}`
+  };
+};
+
+/**
+ * @desc format currency string
+ * @param  {String} [value='']
+ * @param  {String} [currency='USD']
+ * @return {String}
+ */
+export const formatCurrencyString = (value = '', currency = 'USD') => {
+  const decimals = currency === 'ETH' || currency === 'BTC' ? 8 : 2;
+  const formatted = BigNumber(Number(value).toFixed(15)).toFormat(decimals);
+  return `${formatted} ${currency}`;
 };
 
 /**
@@ -267,6 +281,20 @@ export const fromWei = wei => web3.utils.fromWei(String(wei));
  * @return {String}
  */
 export const toWei = ether => web3.utils.toWei(String(ether));
+
+/**
+ * @desc convert from satoshi to bitcoin
+ * @param  {Number} satoshi
+ * @return {BigNumber}
+ */
+export const fromSatoshi = satoshi => BigNumber(String(satoshi)).times('1e-8');
+
+/**
+ * @desc convert from bitcoin to satoshi
+ * @param  {Number} bitcoin
+ * @return {BigNumber}
+ */
+export const toSatoshi = bitcoin => BigNumber(String(bitcoin)).dividedBy('1e-8');
 
 /**
  * @desc capitalise string

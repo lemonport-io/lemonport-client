@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Link from '../components/Link';
 import Loader from '../components/Loader';
 import Column from '../components/Column';
+import Notification from '../components/Notification';
 import lemonportWhite from '../assets/lemonport-white.svg';
 import { colors, responsive } from '../styles';
 
@@ -49,6 +50,7 @@ const BaseLayout = ({ fetching, children, ...props }) => (
       </StyledHeader>
       <StyledContent fetching={fetching}>{fetching ? <Loader /> : children}</StyledContent>
     </Column>
+    <Notification />
   </StyledBaseLayout>
 );
 

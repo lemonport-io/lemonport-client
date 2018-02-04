@@ -1,0 +1,8 @@
+{
+  "USD": { "name": "US Dollar", "code": "USD", "symbol": "$" },
+  "GBP": { "name": "British Pound", "code": "GBP", "symbol": "£" },
+  "EUR": { "name": "Euro", "code": "EUR", "symbol": "€" },
+  "ETH": { "name": "Ethereum", "code": "ETH", "symbol": "Ξ" },
+  "BTC": { "name": "Bitcoin", "code": "BTC", "symbol": "₿" },
+  "LTC": { "nmae": "Litecoin", "code": "LTC", "symbol:": "Ł" }
+}

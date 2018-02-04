@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import Button from '../components/Button';
 import Link from '../components/Link';
 import Column from '../components/Column';
 import BaseLayout from '../layout/base';
-import { initFB, checkStatusFB, loginFB, fetchFB } from '../helpers/facebook';
+import { initFB, loginFB, fetchFB } from '../helpers/facebook';
 import facebookWhite from '../assets/facebook-white.svg';
 import { apiCheckUser } from '../helpers/api';
 import { colors, fonts } from '../styles';
+import { authUpdateFields } from '../reducers/_auth';
 
 const StyledColumn = styled(Column)`
   & div,
@@ -45,24 +47,28 @@ class Home extends Component {
     initFB();
   }
   onFacebookLogin = () => {
-    initFB()
-      .then(() =>
-        checkStatusFB().then(() =>
-          loginFB().then(response => {
-            if (response.status === 'connected') {
-              fetchFB('/me?fields=email').then(data => {
-                apiCheckUser(data.email).then(({ data }) => {
-                  if (data.message === 'USER_FOUND') {
-                    window.browserHistory.push('/signin');
-                  } else {
-                    window.browserHistory.push('/signup');
-                  }
-                });
-              });
-            }
-          })
-        )
-      )
+    loginFB()
+      .then(response => {
+        if (response.status === 'connected') {
+          fetchFB('/me?fields=id,email,first_name,last_name,picture.type(large)').then(data => {
+            const { id, email, first_name, last_name, picture } = data;
+            this.props.authUpdateFields({
+              email,
+              facebookID: id,
+              firstName: first_name,
+              lastName: last_name,
+              profileImage: picture.data.url
+            });
+            apiCheckUser(data.email).then(({ data }) => {
+              if (data.message === 'USER_FOUND') {
+                window.browserHistory.push('/signin');
+              } else {
+                window.browserHistory.push('/signup');
+              }
+            });
+          });
+        }
+      })
       .catch(error => console.error(error));
   };
   render = () => (
@@ -82,4 +88,6 @@ class Home extends Component {
   );
 }
 
-export default Home;
+export default connect(null, {
+  authUpdateFields
+})(Home);

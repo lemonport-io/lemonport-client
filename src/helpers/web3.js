@@ -133,15 +133,15 @@ export const transferToken = transaction =>
 
 /**
  * @desc get transaction fee
- * @param {Object} [{selected, address, recipient, amount, gasPrice}]
+ * @param {Object} [{currency, address, recipient, amount, gasPrice}]
  * @return {String}
  */
-export const getTransactionFee = async ({ selected, address, recipient, amount, gasPrice }) => {
+export const getTransactionFee = async ({ currency, address, recipient, amount, gasPrice }) => {
   let data = '0x';
   let estimateGasData = { to: recipient, data };
-  if (selected !== 'ETH') {
+  if (currency !== 'ETH') {
     const tokenIndex = getTokenIndex();
-    const tokenObject = tokenIndex.filter(token => token.symbol === selected)[0];
+    const tokenObject = tokenIndex.filter(token => token.symbol === currency)[0];
     const transferHexMethod = web3.utils.sha3('transfer(address,uint256)').substring(0, 10);
     const value = new BigNumber(amount || '100')
       .times(new BigNumber(10).pow(tokenObject.decimal))

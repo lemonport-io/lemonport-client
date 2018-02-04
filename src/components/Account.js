@@ -1,74 +1,90 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BigNumber from 'bignumber.js';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import Button from '../components/Button';
-import { responsive, fonts, colors } from '../styles';
+import Indicator from '../components/Indicator';
+import { fonts, responsive } from '../styles';
 import { modalOpen } from '../reducers/_modal';
+import { overviewChangeNativeCurrency } from '../reducers/_overview';
 import { notificationShow } from '../reducers/_notification';
+import { convertToNative } from '../helpers/utilities';
+import currencies from '../libraries/currencies.json';
 
-const StyledFlex = styled.div`
+const StyledAccount = styled.div`
+  width: 100%;
+`;
+
+const StyledColumn = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
 `;
 
-const StyledActions = styled.div`
+const StyledIndicator = styled(Indicator)`
+  position: absolute;
+  top: 0;
+  right: 15px;
+`;
+
+const StyledFlex = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+`;
+
+const StyledActions = styled.div`
+  width: 100%;
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
   & button {
+    font-size: ${fonts.size.h6};
     width: 100%;
+    padding: 0.6em 1em;
+    margin: 0;
   }
-  @media screen and (${responsive.sm.max}) {
-    & button {
-      font-size: ${fonts.size.h6};
-    }
+  & button:first-of-type {
+    margin-right: 10px;
+  }
+  & button:last-of-type {
+    margin-left: 10px;
+  }
+  @media screen and (${responsive.xs.max}) {
+    margin-top: 30px;
   }
 `;
 
 const StyledBalance = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin: 15px 0;
-`;
-
-const StyledAccount = styled.div`
-  width: 100%;
-  margin: 10px auto;
-`;
-
-const StyledLine = styled.div`
-  width: 100%;
-  border-top: 1px solid rgb(${colors.lightGrey});
+  flex-direction: column;
+  justify-content: flex-end;
+  margin: 10px 0;
+  text-align: right;
+  & > div:first-child {
+    font-weight: 500;
+    font-size: 1.25em;
+  }
 `;
 
 class Account extends Component {
   onBuyEther = () => window.browserHistory.push(`/buy-ether?address=${this.props.account.address}`);
   openSendModal = () =>
-    this.props.modalOpen('SEND_ETHER', {
-      name: this.props.account.name,
-      address: this.props.account.address,
-      type: this.props.account.type,
-      tokens: this.props.account.tokens
-    });
-  openReceiveModal = () =>
-    this.props.modalOpen('RECEIVE_ETHER', {
-      name: this.props.account.name,
+    this.props.modalOpen('SEND', {
+      currency: this.props.account.currency,
       address: this.props.account.address
     });
-  getPrice = (amount, symbol) => {
-    const priceObject = this.props.prices[symbol];
-    const native = this.props.nativeCurrency;
-    const _amount = Number(amount.replace(/[^0-9.]/gi, ''));
-    const decimals = native === 'ETH' || native === 'BTC' ? 8 : 2;
-    if (priceObject) {
-      const result = String(_amount * priceObject[native]);
-      return `${BigNumber(result).toFormat(decimals)} ${native}`;
-    }
-    return null;
+  openReceiveModal = () =>
+    this.props.modalOpen('RECEIVE', {
+      currency: this.props.account.currency,
+      address: this.props.account.address
+    });
+  changeNativeCurrency = () => {
+    const activeCurrency = currencies.indexOf(this.props.nativeCurrency);
+    const index = activeCurrency + 1 < currencies.length ? activeCurrency + 1 : 0;
+    const nextCurrency = currencies[index];
+    overviewChangeNativeCurrency(nextCurrency);
   };
   shouldComponentUpdate(nextProps) {
     if (
@@ -80,38 +96,33 @@ class Account extends Component {
   }
   render = () => (
     <StyledAccount>
-      <Card outline>
-        <StyledFlex>
+      <Card color={this.props.account.currency}>
+        <StyledIndicator currency={this.props.account.currency} />
+
+        <StyledColumn>
           <StyledFlex>
-            <div>
-              <h4>{this.props.account.currency}</h4>
-            </div>
+            <h4>{currencies[this.props.account.currency].name}</h4>
+            <StyledBalance>
+              <div>{`${this.props.account.balance} ${this.props.account.currency}`}</div>
+              <div onClick={this.changeNativeCurrency}>
+                {convertToNative(this.props.account.balance, this.props.account.currency).string}
+              </div>
+            </StyledBalance>
           </StyledFlex>
-          <StyledBalance>
-            <div>{`${this.props.account.balance} ETH`}</div>
-            <div>{this.getPrice(this.props.account.balance, 'ETH')}</div>
-          </StyledBalance>
-          {!!this.props.account.tokens && <StyledLine />}
-          {!!this.props.account.tokens &&
-            this.props.account.tokens.map(token => (
-              <StyledBalance key={`${this.props.account.address}-${token.symbol}`}>
-                <div>{`${token.balance} ${token.symbol}`}</div>
-                <div>{this.getPrice(token.balance, token.symbol)}</div>
-              </StyledBalance>
-            ))}
-        </StyledFlex>
+
+          <StyledActions>
+            <Button outline onClick={this.openSendModal}>
+              Send
+            </Button>
+            <Button outline onClick={this.onBuyEther}>
+              Exchange
+            </Button>
+            <Button outline onClick={this.openReceiveModal}>
+              Receive
+            </Button>
+          </StyledActions>
+        </StyledColumn>
       </Card>
-      <StyledActions>
-        <Button outline onClick={this.openSendModal}>
-          Send
-        </Button>
-        <Button outline onClick={this.onBuyEther}>
-          Buy Ether
-        </Button>
-        <Button outline onClick={this.openReceiveModal}>
-          Receive
-        </Button>
-      </StyledActions>
     </StyledAccount>
   );
 }
@@ -119,6 +130,7 @@ class Account extends Component {
 Account.propTypes = {
   account: PropTypes.object.isRequired,
   modalOpen: PropTypes.func.isRequired,
+  overviewChangeNativeCurrency: PropTypes.func.isRequired,
   notificationShow: PropTypes.func.isRequired,
   prices: PropTypes.object.isRequired,
   nativeCurrency: PropTypes.string.isRequired
@@ -131,5 +143,6 @@ const reduxProps = ({ overview }) => ({
 
 export default connect(reduxProps, {
   modalOpen,
-  notificationShow
+  notificationShow,
+  overviewChangeNativeCurrency
 })(Account);

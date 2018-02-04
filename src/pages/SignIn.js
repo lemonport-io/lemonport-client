@@ -14,7 +14,6 @@ import {
   authUpdateFields,
   authClearFields
 } from '../reducers/_auth';
-import { initFB, checkStatusFB, fetchFB } from '../helpers/facebook';
 
 const StyledForm = styled(Form)`
   padding: 20px;
@@ -33,35 +32,11 @@ const StyledProfile = styled.div`
   }
   & p {
     font-weight: 700;
+    font-size: 24px;
   }
 `;
 
 class SignIn extends Component {
-  componentDidMount() {
-    initFB().then(() =>
-      checkStatusFB()
-        .then(response => {
-          if (response.status === 'connected') {
-            fetchFB('/me?fields=id,email,first_name,last_name').then(data => {
-              const { id, email, first_name, last_name } = data;
-              this.props.authUpdateFields({
-                email,
-                facebookID: id,
-                firstName: first_name,
-                lastName: last_name
-              });
-            });
-            fetchFB('me/picture?type=large').then(({ data }) => {
-              this.props.authUpdateFields({
-                profileImage: data.url
-              });
-            });
-          } else {
-          }
-        })
-        .catch(error => console.error(error))
-    );
-  }
   onSubmit = e => {
     e.preventDefault();
     if (this.props.requireTwoFactor) {
@@ -108,7 +83,12 @@ class SignIn extends Component {
         ) : (
           <StyledForm onSubmit={this.onSubmit}>
             <h4>Two Factor authentication</h4>
-
+            {!!this.props.facebookID && (
+              <StyledProfile>
+                <img src={this.props.profileImage} alt="profile" />
+                <p>{`${this.props.firstName} ${this.props.lastName}`}</p>
+              </StyledProfile>
+            )}
             <InputTwoFactor
               transparent
               placeholder="6 Digit Code"

@@ -9,21 +9,17 @@ import Input from '../components/Input';
 import InputTwoFactor from '../components/InputTwoFactor';
 import Button from '../components/Button';
 import Form from '../components/Form';
-import Select from '../components/Select';
 import ButtonClose from '../components/ButtonClose';
 import qrIcon from '../assets/qr-code.svg';
+import currencies from '../libraries/currencies.json';
 import {
-  sendGetGasPrices,
+  sendGetTransactionFee,
   sendUpdateGasPrice,
   sendEtherApi,
-  sendEtherClient,
   sendTokenApi,
-  sendTokenClient,
   sendClearFields,
   sendUpdateRecipient,
   sendUpdateAmount,
-  sendUpdatePrivateKey,
-  sendUpdateSelected,
   sendUpdateCode
 } from '../reducers/_send';
 import { isValidAddress } from '../helpers/validators';
@@ -77,13 +73,12 @@ const StyledAccountType = styled.span`
   font-weight: ${fonts.weight.semibold};
 `;
 
-const StyledSelect = styled(Select)`
+const StyledCurrency = styled.div`
   position: absolute;
   right: 0;
+  color: rgb(${colors.dark});
+  padding: 10px;
   top: 10px;
-  @media screen and (${responsive.sm.max}) {
-    margin: 3px;
-  }
 `;
 
 const StyledWrapper = styled.div`
@@ -111,56 +106,30 @@ const StyledQRIcon = styled.img`
   }
 `;
 
-const StyledOptions = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledButton = styled(Button)`
-  width: 100%;
-  height: 54px;
-  & p {
-    margin-top: 2px;
-  }
-  & p:first-child {
-    font-weight: 500;
-  }
-  & p:last-child {
-    font-weight: 400;
-    font-size: 12px;
-  }
-`;
-
-class SendEtherModal extends Component {
+class SendModal extends Component {
   componentDidMount() {
     this.props.userCheckTwoFactor();
-    this.props.sendGetGasPrices();
+    this.props.sendGetTransactionFee(this.props.modalProps.currency);
   }
   state = {
     confirm: false,
     isChecksum: false,
-    showQRCodeReader: false,
-    QRCodeReaderTarget: ''
+    showQRCodeReader: false
   };
   componentWillReceiveProps(newProps) {
     if (newProps.recipient.length >= 42) {
-      if (newProps.selected !== this.props.selected) {
-        this.props.sendUpdateGasPrice();
-      } else if (newProps.recipient !== this.props.recipient) {
-        this.props.sendUpdateGasPrice();
+      if (newProps.recipient !== this.props.recipient) {
+        this.props.sendUpdateGasPrice(null, this.props.modalProps.currency);
       } else if (newProps.amount !== this.props.amount) {
-        this.props.sendUpdateGasPrice();
+        this.props.sendUpdateGasPrice(null, this.props.modalProps.currency);
       }
     }
   }
   onGoBack = () => {
-    if (this.props.modalProps.type === 'COLD') {
-      this.props.sendUpdatePrivateKey('');
-    }
     this.setState({ confirm: false });
   };
   onSendAnother = () => {
-    this.props.sendGetGasPrices();
+    this.props.sendGetTransactionFee(this.props.modalProps.currency);
     this.setState({ confirm: false });
     this.props.sendClearFields();
   };
@@ -170,8 +139,6 @@ class SendEtherModal extends Component {
       address: this.props.modalProps.address,
       recipient: this.props.recipient,
       amount: this.props.amount,
-      privateKey: this.props.privateKey,
-      token: this.props.selected,
       gasPrice: this.props.gasPrice,
       code: this.props.code
     };
@@ -181,29 +148,20 @@ class SendEtherModal extends Component {
         return;
       }
       this.setState({ confirm: true });
-    } else if (this.props.modalProps.type === 'HOT') {
-      if (this.props.selected === 'ETH') {
+    } else {
+      if (this.props.modalProps.currency === 'ETH') {
         this.props.sendEtherApi(request);
+      } else if (this.props.modalProps.currency === 'BTC') {
+        this.props.sendBitcoinApi(request);
       } else {
         this.props.sendTokenApi(request);
       }
-    } else {
-      if (this.props.selected === 'ETH') {
-        this.props.sendEtherClient(request);
-      } else {
-        this.props.sendTokenClient(request);
-      }
     }
   };
-  toggleQRCodeReader = target =>
-    this.setState({ showQRCodeReader: !this.state.showQRCodeReader, QRCodeReaderTarget: target });
+  toggleQRCodeReader = target => this.setState({ showQRCodeReader: !this.state.showQRCodeReader });
   onQRCodeScan = data => {
-    if (this.state.QRCodeReaderTarget === 'recipient') {
-      this.props.sendUpdateRecipient(data);
-    } else if (this.state.QRCodeReaderTarget === 'privateKey') {
-      this.props.sendUpdatePrivateKey(data);
-    }
-    this.setState({ showQRCodeReader: false, QRCodeReaderTarget: '' });
+    this.props.sendUpdateRecipient(data);
+    this.setState({ showQRCodeReader: false });
   };
   onQRCodeError = () => {
     this.props.notificationShow(`Failed to scan QR code, please try again`, true);
@@ -213,11 +171,6 @@ class SendEtherModal extends Component {
     this.props.closeModal();
   };
   render = () => {
-    let selectOptions = [];
-    if (this.props.modalProps.tokens) {
-      selectOptions = this.props.modalProps.tokens.map(token => token.symbol);
-    }
-    selectOptions.unshift('ETH');
     return (
       <Card>
         <ButtonClose onClick={this.onClose} />
@@ -225,7 +178,7 @@ class SendEtherModal extends Component {
           !this.state.confirm ? (
             <StyledForm onSubmit={this.onSubmit}>
               <StyledFlex>
-                <h4>{`Send from ${this.props.modalProps.name}`}</h4>
+                <h4>{`Send ${currencies[this.props.modalProps.currency].name}`}</h4>
                 <StyledAccountType>{this.props.modalProps.type}</StyledAccountType>
               </StyledFlex>
               <StyledFlex>
@@ -235,7 +188,7 @@ class SendEtherModal extends Component {
                   value={this.props.recipient}
                   onChange={({ target }) => this.props.sendUpdateRecipient(target.value)}
                 />
-                <StyledQRIcon onClick={() => this.toggleQRCodeReader('recipient')} />
+                <StyledQRIcon onClick={this.toggleQRCodeReader} />
               </StyledFlex>
               <StyledFlex>
                 <Input
@@ -244,51 +197,15 @@ class SendEtherModal extends Component {
                   value={this.props.amount}
                   onChange={({ target }) => this.props.sendUpdateAmount(target.value)}
                 />
-                <StyledSelect
-                  dark
-                  selected={this.props.selected}
-                  options={selectOptions}
-                  onChange={({ target }) => this.props.sendUpdateSelected(target.value)}
-                />
+                <StyledCurrency>{this.props.modalProps.currency}</StyledCurrency>
               </StyledFlex>
-              {this.props.modalProps.type === 'COLD' && (
-                <StyledFlex>
-                  <Input
-                    placeholder="Private Key"
-                    type="text"
-                    value={this.props.privateKey}
-                    onChange={({ target }) => this.props.sendUpdatePrivateKey(target.value)}
-                  />
-                  <StyledQRIcon onClick={() => this.toggleQRCodeReader('privateKey')} />
-                </StyledFlex>
-              )}
               <StyledParagraph>
                 <strong>Transaction Fee:</strong>
                 {this.props.txFee &&
-                  ` ${BigNumber(this.props.txFee).toFormat(6)} ETH (${convertToNative(
-                    this.props.txFee
-                  )})`}
+                  ` ${BigNumber(this.props.txFee).toFormat(8)} ${this.props.modalProps.currency} (${
+                    convertToNative(this.props.txFee, this.props.modalProps.currency).string
+                  })`}
               </StyledParagraph>
-              <StyledOptions>
-                <StyledButton
-                  dark
-                  disabled={this.props.recipient.length !== 42}
-                  onClick={() => this.props.sendUpdateGasPrice(this.props.gasPrices.average)}
-                >
-                  <p>Slow</p>
-                  <p>{`${this.props.gasPrices.average || 0} Gwei ≈ ${this.props.gasPrices.avgWait ||
-                    0} mins`}</p>
-                </StyledButton>
-                <StyledButton
-                  dark
-                  disabled={this.props.recipient.length !== 42}
-                  onClick={() => this.props.sendUpdateGasPrice(this.props.gasPrices.fast)}
-                >
-                  <p>Fast</p>
-                  <p>{`${this.props.gasPrices.fast || 0} Gwei ≈ ${this.props.gasPrices.fastWait ||
-                    0} mins`}</p>
-                </StyledButton>
-              </StyledOptions>
               <Button
                 disabled={this.props.recipient.length !== 42 || !this.props.amount.length}
                 fetching={this.props.fetching}
@@ -300,22 +217,16 @@ class SendEtherModal extends Component {
                 <QRCodeReader
                   onScan={this.onQRCodeScan}
                   onError={this.onQRCodeError}
-                  onClose={() => this.toggleQRCodeReader('')}
+                  onClose={this.toggleQRCodeReader}
                 />
               )}
             </StyledForm>
           ) : (
             <StyledForm onSubmit={this.onSubmit}>
               <StyledFlex>
-                <h4>{`Confirm transaction from ${this.props.modalProps.name}`}</h4>
+                <h4>{`Confirm ${currencies[this.props.modalProps.currency].name} transaction`}</h4>
                 <StyledAccountType>{this.props.modalProps.type}</StyledAccountType>
               </StyledFlex>
-              {this.props.modalProps.type === 'COLD' && (
-                <StyledParagraph>
-                  <strong>Private Key:</strong>
-                  {` Private Key Confirmed`}
-                </StyledParagraph>
-              )}
               <StyledParagraph>
                 <strong>Sender:</strong>
                 {` ${this.props.modalProps.address}`}
@@ -327,18 +238,16 @@ class SendEtherModal extends Component {
               <StyledParagraph>
                 <strong>Amount:</strong>
                 {this.props.amount &&
-                  ` ${BigNumber(this.props.amount).toFormat(6)} ${this.props.selected} ${
-                    convertToNative(this.props.amount, this.props.selected)
-                      ? `(${convertToNative(this.props.amount, this.props.selected)})`
-                      : ``
+                  ` ${BigNumber(this.props.amount).toFormat(8)} ${this.props.modalProps.currency} ${
+                    convertToNative(this.props.amount, this.props.modalProps.currency).string
                   }`}
               </StyledParagraph>
               <StyledParagraph>
                 <strong>Transaction Fee:</strong>
                 {this.props.txFee &&
-                  ` ${BigNumber(this.props.txFee).toFormat(6)} ETH (${convertToNative(
-                    this.props.txFee
-                  )})`}
+                  ` ${BigNumber(this.props.txFee).toFormat(8)} ${this.props.modalProps.currency} (${
+                    convertToNative(this.props.txFee, this.props.modalProps.currency).string
+                  })`}
               </StyledParagraph>
               {!!this.props.twoFactor && (
                 <div>
@@ -389,18 +298,14 @@ class SendEtherModal extends Component {
   };
 }
 
-SendEtherModal.propTypes = {
-  sendGetGasPrices: PropTypes.func.isRequired,
+SendModal.propTypes = {
+  sendGetTransactionFee: PropTypes.func.isRequired,
   sendUpdateGasPrice: PropTypes.func.isRequired,
   sendEtherApi: PropTypes.func.isRequired,
-  sendEtherClient: PropTypes.func.isRequired,
   sendTokenApi: PropTypes.func.isRequired,
-  sendTokenClient: PropTypes.func.isRequired,
   sendClearFields: PropTypes.func.isRequired,
   sendUpdateRecipient: PropTypes.func.isRequired,
   sendUpdateAmount: PropTypes.func.isRequired,
-  sendUpdatePrivateKey: PropTypes.func.isRequired,
-  sendUpdateSelected: PropTypes.func.isRequired,
   sendUpdateCode: PropTypes.func.isRequired,
   notificationShow: PropTypes.func.isRequired,
   userCheckTwoFactor: PropTypes.func.isRequired,
@@ -410,12 +315,8 @@ SendEtherModal.propTypes = {
   recipient: PropTypes.string.isRequired,
   amount: PropTypes.string.isRequired,
   transaction: PropTypes.string.isRequired,
-  privateKey: PropTypes.string.isRequired,
-  selected: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   fetchingGasPrices: PropTypes.bool.isRequired,
-  gasPrices: PropTypes.object.isRequired,
-  gasPrice: PropTypes.number.isRequired,
   txFee: PropTypes.string.isRequired,
   twoFactor: PropTypes.bool.isRequired
 };
@@ -425,29 +326,21 @@ const reduxProps = ({ send, user, overview }) => ({
   recipient: send.recipient,
   amount: send.amount,
   transaction: send.transaction,
-  privateKey: send.privateKey,
-  selected: send.selected,
   code: send.code,
   fetchingGasPrices: send.fetchingGasPrices,
-  gasPrices: send.gasPrices,
-  gasPrice: send.gasPrice,
   txFee: send.txFee,
   twoFactor: user.twoFactor
 });
 
 export default connect(reduxProps, {
-  sendGetGasPrices,
+  sendGetTransactionFee,
   sendUpdateGasPrice,
   sendEtherApi,
-  sendEtherClient,
   sendTokenApi,
-  sendTokenClient,
   sendClearFields,
   sendUpdateRecipient,
   sendUpdateAmount,
-  sendUpdatePrivateKey,
-  sendUpdateSelected,
   sendUpdateCode,
   notificationShow,
   userCheckTwoFactor
-})(SendEtherModal);
+})(SendModal);

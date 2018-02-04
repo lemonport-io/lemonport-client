@@ -10,7 +10,14 @@ export const colors = {
   gold: '246, 203, 71',
   green: '79, 180, 128',
   red: '221, 69, 65',
-  facebook: '74, 103, 173'
+  facebook: '74, 103, 173',
+  dashboard: '245, 247, 250',
+  USD: '133, 187, 101',
+  GBP: '195, 159, 110',
+  EUR: '0, 32, 159',
+  ETH: '78, 142, 233',
+  BTC: '255, 153, 0',
+  LTC: '190, 190, 190'
 };
 
 export const fonts = {
@@ -68,7 +75,15 @@ export const responsive = {
 export const globalStyles = `
   @import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,700');
 
-  html, body, #root, #router-root {
+  html, body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  #root{
     height: 100%;
     width: 100%;
     margin: 0;
@@ -83,6 +98,7 @@ export const globalStyles = `
   	font-stretch: normal;
     font-size: ${fonts.size.medium};
     color: rgb(${colors.dark});
+    overflow-x: hidden;
     overflow-y:auto;
     text-rendering: optimizeLegibility;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

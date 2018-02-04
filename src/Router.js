@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import Warning from './components/Warning';
-import Notification from './components/Notification';
 import { getSession } from './helpers/utilities';
 
 const Home = Loadable({
@@ -57,7 +55,6 @@ class Router extends Component {
   }
   render = () => (
     <div>
-      <Warning />
       <Switch>
         <Route
           exact
@@ -65,7 +62,11 @@ class Router extends Component {
           render={routerProps => {
             const session = getSession();
             if (session && session.expires > Date.now()) {
-              return <Redirect to="/overview" />;
+              if (!session.twoFactor) {
+                return <Redirect to="/setup-two-factor" />;
+              } else {
+                return <Redirect to="/overview" />;
+              }
             } else if (session && session.expires < Date.now()) {
               return <Redirect to="/signout" />;
             }
@@ -78,7 +79,11 @@ class Router extends Component {
           render={routerProps => {
             const session = getSession();
             if (session && session.expires > Date.now()) {
-              return <Redirect to="/overview" />;
+              if (!session.twoFactor) {
+                return <Redirect to="/setup-two-factor" />;
+              } else {
+                return <Redirect to="/overview" />;
+              }
             } else if (session && session.expires < Date.now()) {
               return <Redirect to="/signout" />;
             }
@@ -91,7 +96,11 @@ class Router extends Component {
           render={routerProps => {
             const session = getSession();
             if (session && session.expires > Date.now()) {
-              return <Redirect to="/overview" />;
+              if (!session.twoFactor) {
+                return <Redirect to="/setup-two-factor" />;
+              } else {
+                return <Redirect to="/overview" />;
+              }
             } else if (session && session.expires < Date.now()) {
               return <Redirect to="/signout" />;
             }
@@ -130,12 +139,14 @@ class Router extends Component {
             if (!session || session.expires < Date.now()) {
               return <Redirect to="/" />;
             }
+            if (!session.twoFactor) {
+              return <Redirect to="/setup-two-factor" />;
+            }
             return <Overview {...routerProps} />;
           }}
         />
         <Route component={NotFound} />
       </Switch>
-      <Notification />
     </div>
   );
 }
