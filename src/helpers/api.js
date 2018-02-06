@@ -89,7 +89,7 @@ export const apiGetSingleAccount = (currency = '') => {
 export const apiSendBitcoin = (address = '', recipient = '', amount = '', code = '') => {
   const sessionToken = getSession().token;
   return api.post(
-    '/ethereum/send-bitcoin',
+    '/bitcoin/send-bitcoin',
     { from: address, to: recipient, value: amount, code },
     { headers: { Authorization: sessionToken } }
   );

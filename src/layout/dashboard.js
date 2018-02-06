@@ -43,8 +43,6 @@ const StyledHeader = styled.div`
 const StyledTotalBalance = styled.div`
   z-index: 1;
   opacity: 0.7;
-  font-weight: 300px;
-  font-size: 20px;
 `;
 
 const StyledLogo = styled.div`
