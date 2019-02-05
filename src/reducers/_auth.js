@@ -220,6 +220,7 @@ export const authEnableTwoFactor = code => dispatch => {
 export const authSignOut = () => dispatch => {
   deleteSession();
   dispatch({ type: AUTH_SIGNOUT });
+  dispatch({ type: 'RESET' });
   window.browserHistory.push('/');
 };
 
